@@ -9,14 +9,14 @@ const users = [
     name: 'Super Admin',
     email: 'admin@alaaskafit.com',
     password: 'adminpassword',
-    role: 'super-admin',
+    role: 'Super Admin',
     permissions: ['all']
   },
   {
-    name: 'Editor User',
+    name: 'Admin User',
     email: 'editor@alaaskafit.com',
     password: 'editorpassword',
-    role: 'editor',
+    role: 'Admin',
     permissions: ['products:edit', 'blogs:edit']
   }
 ];

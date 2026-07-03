@@ -14,7 +14,7 @@ export const updateUserRole = async (req, res, next) => {
     const { role, permissions } = req.body;
     const { id } = req.params;
 
-    if (!['super-admin', 'admin', 'editor', 'content-manager'].includes(role)) {
+    if (!['Super Admin', 'Admin', 'User'].includes(role)) {
       return res.status(400).json({ message: 'Invalid role value' });
     }
 
@@ -62,8 +62,8 @@ export const deleteUser = async (req, res, next) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    if (user.role === 'super-admin') {
-      return res.status(400).json({ message: 'Cannot delete the super-admin user' });
+    if (user.role === 'Super Admin') {
+      return res.status(400).json({ message: 'Cannot delete the Super Admin user' });
     }
 
     await user.deleteOne();

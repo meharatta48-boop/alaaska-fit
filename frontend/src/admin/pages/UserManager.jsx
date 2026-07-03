@@ -3,12 +3,11 @@ import { apiFetch } from '../../utils/api.js';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { Shield, Trash2, Loader2, UserCog } from 'lucide-react';
 
-const ROLES = ['super-admin', 'admin', 'editor', 'content-manager'];
+const ROLES = ['Super Admin', 'Admin', 'User'];
 const ROLE_BADGE = {
-  'super-admin': 'bg-gold-400 text-black',
-  'admin': 'bg-blue-500/20 text-blue-400 border border-blue-400/20',
-  'editor': 'bg-green-500/20 text-green-400 border border-green-400/20',
-  'content-manager': 'bg-matte-border text-matte-text border border-matte-border',
+  'Super Admin': 'bg-gold-400 text-black',
+  'Admin': 'bg-blue-500/20 text-blue-400 border border-blue-400/20',
+  'User': 'bg-matte-border text-matte-text border border-matte-border',
 };
 
 export default function UserManager() {
@@ -27,8 +26,8 @@ export default function UserManager() {
       setUsers(data);
     } catch {
       setUsers([
-        { _id: 'u1', name: 'Super Admin', email: 'admin@alaaskafit.com', role: 'super-admin', permissions: ['all'], createdAt: new Date().toISOString() },
-        { _id: 'u2', name: 'Editor User', email: 'editor@alaaskafit.com', role: 'editor', permissions: ['products:edit', 'blogs:edit'], createdAt: new Date().toISOString() },
+        { _id: 'u1', name: 'Super Admin', email: 'admin@alaaskafit.com', role: 'Super Admin', permissions: ['all'], createdAt: new Date().toISOString() },
+        { _id: 'u2', name: 'Admin User', email: 'editor@alaaskafit.com', role: 'Admin', permissions: ['products:edit', 'blogs:edit'], createdAt: new Date().toISOString() },
       ]);
     } finally { setLoading(false); }
   };
@@ -106,7 +105,7 @@ export default function UserManager() {
                   </td>
                   <td className="px-4 py-4 text-matte-text hidden md:table-cell">{u.email}</td>
                   <td className="px-4 py-4">
-                    {u._id === currentUser?._id || u.role === 'super-admin' ? (
+                    {u._id === currentUser?._id || u.role === 'Super Admin' ? (
                       <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${ROLE_BADGE[u.role]}`}>{u.role}</span>
                     ) : (
                       <select
@@ -115,7 +114,7 @@ export default function UserManager() {
                         disabled={updating === u._id}
                         className="bg-matte-black border border-matte-border text-white text-[10px] font-mono rounded-lg px-2 py-1.5 outline-none focus:border-gold-400 cursor-pointer transition-colors"
                       >
-                        {ROLES.filter(r => r !== 'super-admin').map(r => <option key={r} value={r}>{r}</option>)}
+                        {ROLES.filter(r => r !== 'Super Admin').map(r => <option key={r} value={r}>{r}</option>)}
                       </select>
                     )}
                   </td>
@@ -123,7 +122,7 @@ export default function UserManager() {
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-2 justify-end">
                       {updating === u._id && <Loader2 size={13} className="animate-spin text-gold-400" />}
-                      {u._id !== currentUser?._id && u.role !== 'super-admin' && (
+                      {u._id !== currentUser?._id && u.role !== 'Super Admin' && (
                         <button
                           onClick={() => deleteUser(u._id)}
                           disabled={deleting === u._id}
@@ -142,12 +141,11 @@ export default function UserManager() {
       </div>
 
       {/* Permission Info */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[
-          { role: 'super-admin', icon: '⚡', perms: ['All system access', 'Delete any user', 'Manage all configs', 'All CRUD operations'] },
-          { role: 'admin', icon: '🛡️', perms: ['Product management', 'Quote management', 'User role editing', 'Config & settings'] },
-          { role: 'editor', icon: '✏️', perms: ['Create/edit products', 'Manage blog articles', 'Upload media files', 'View dashboard'] },
-          { role: 'content-manager', icon: '📝', perms: ['Create blog articles', 'View analytics', 'Read-only access', 'No product editing'] },
+          { role: 'Super Admin', icon: '⚡', perms: ['All system access', 'Delete other users', 'Manage configs & settings', 'Role & permissions editing'] },
+          { role: 'Admin', icon: '🛡️', perms: ['Product management', 'Quote & lead management', 'Blog & CMS management', 'Media uploads & dashboard'] },
+          { role: 'User', icon: '👤', perms: ['Browse public pages', 'View products & blogs', 'Submit quotes & contact inquiries', 'No admin panel access'] },
         ].map(({ role, icon, perms }) => (
           <div key={role} className="bg-matte-gray border border-matte-border rounded-xl p-4">
             <div className="flex items-center gap-2 mb-3">

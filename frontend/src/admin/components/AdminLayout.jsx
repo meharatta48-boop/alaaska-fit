@@ -115,22 +115,31 @@ function Sidebar({ collapsed, setCollapsed, onClose, user, onLogout }) {
 
       {/* Nav groups */}
       <nav className="flex-1 overflow-y-auto py-3 px-2 flex flex-col gap-0.5" style={{ scrollbarWidth: 'none' }}>
-        {NAV_GROUPS.map(group => (
-          <div key={group.label} className="mb-1">
-            {!collapsed && (
-              <p className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#2E2E2E] px-3 py-1.5">{group.label}</p>
-            )}
-            {group.items.map(item => (
-              <NavItem
-                key={item.path}
-                item={item}
-                collapsed={collapsed}
-                isActive={isActive(item)}
-                onClick={onClose}
-              />
-            ))}
-          </div>
-        ))}
+        {NAV_GROUPS.map(group => {
+          const items = group.items.filter(item => {
+            if (item.path === '/admin/users') {
+              return user?.role === 'Super Admin';
+            }
+            return true;
+          });
+          if (items.length === 0) return null;
+          return (
+            <div key={group.label} className="mb-1">
+              {!collapsed && (
+                <p className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#2E2E2E] px-3 py-1.5">{group.label}</p>
+              )}
+              {items.map(item => (
+                <NavItem
+                  key={item.path}
+                  item={item}
+                  collapsed={collapsed}
+                  isActive={isActive(item)}
+                  onClick={onClose}
+                />
+              ))}
+            </div>
+          );
+        })}
       </nav>
 
       {/* User widget */}
@@ -269,7 +278,7 @@ export default function AdminLayout({ children }) {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/admin/login');
+    navigate('/');
   };
 
   // Find current page label for header

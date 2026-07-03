@@ -25,6 +25,16 @@ export const AuthProvider = ({ children }) => {
     bootstrapAuth();
   }, []);
 
+  // Listen for authentication failure events (e.g. invalid/expired token)
+  useEffect(() => {
+    const handleAuthFailure = () => {
+      setUser(null);
+      setAccessToken('');
+    };
+    window.addEventListener('auth-failure', handleAuthFailure);
+    return () => window.removeEventListener('auth-failure', handleAuthFailure);
+  }, []);
+
   const login = async (email, password) => {
     setLoading(true);
     try {

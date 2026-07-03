@@ -1,10 +1,7 @@
 const ROLES = {
-  'super-admin': 5,
-  'admin': 4,
-  'editor': 3,
-  'manager': 2,
-  'staff': 1,
-  'client': 0
+  'Super Admin': 3,
+  'Admin': 2,
+  'User': 1
 };
 
 export const restrictTo = (...allowedRoles) => {
@@ -33,8 +30,8 @@ export const checkPermission = (permission) => {
       return res.status(401).json({ message: 'Authentication required' });
     }
 
-    // super-admin has absolute permission
-    if (req.user.role === 'super-admin') {
+    // Super Admin has absolute permission
+    if (req.user.role === 'Super Admin') {
       return next();
     }
 

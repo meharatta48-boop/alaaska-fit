@@ -8,8 +8,8 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: {
     type: String,
-    enum: ['super-admin', 'admin', 'editor', 'manager', 'staff', 'client'],
-    default: 'client'
+    enum: ['Super Admin', 'Admin', 'User'],
+    default: 'User'
   },
   permissions: { type: [String], default: [] }
 }, { timestamps: true });

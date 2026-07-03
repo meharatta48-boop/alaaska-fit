@@ -255,8 +255,8 @@ export default function SettingsPanel() {
   // RBAC state
   const [customRoles, setCustomRoles] = useState([
     { name: 'Super Admin', permissions: ['all'] },
-    { name: 'Apparel Editor', permissions: ['products:edit', 'media:edit'] },
-    { name: 'Lead Manager', permissions: ['quotes:view', 'quotes:edit'] }
+    { name: 'Admin', permissions: ['products:edit', 'blogs:edit', 'media:edit', 'settings:edit'] },
+    { name: 'User', permissions: ['none'] }
   ]);
   const [newRoleName, setNewRoleName] = useState('');
   const [newRolePerms, setNewRolePerms] = useState([]);

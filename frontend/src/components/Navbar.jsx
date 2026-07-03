@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext.jsx';
-import { ChevronDown, Menu, X, LogIn, ArrowRight } from 'lucide-react';
+import { ChevronDown, Menu, X, LogIn, ArrowRight, LogOut, LayoutDashboard } from 'lucide-react';
 const CloseIcon = X;
 import { useConfig } from '../context/ConfigContext.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 
 const STATIC_NAV_ITEMS = [
   { label: 'Home', path: '/' },
@@ -41,6 +42,7 @@ const STATIC_NAV_ITEMS = [
 
 export default function Navbar() {
   const { config } = useConfig();
+  const { user, logout } = useAuth();
   const settings = config?.settings || {};
   const headerConfig = settings.header || {};
   const branding = settings.branding || {};
@@ -233,13 +235,40 @@ export default function Navbar() {
 
           {/* CTA Group */}
           <div className="hidden lg:flex items-center gap-3">
-            <button
-              onClick={() => handleNav('/admin/login')}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[11px] font-semibold uppercase tracking-wider text-[#4A6080] hover:text-[#1E3A8A] hover:bg-[#F8FAFF] transition-colors cursor-pointer"
-            >
-              <LogIn size={13} />
-              Login
-            </button>
+            {user ? (
+              <div className="flex items-center gap-3.5">
+                <span className="text-[11px] font-mono text-[#4A6080]">
+                  Hi, <span className="font-semibold text-[#1E3A8A]">{user.name}</span> <span className="px-2 py-0.5 bg-[#EFF6FF] border border-[#1E3A8A]/10 rounded-full font-mono text-[9px] uppercase tracking-wider text-[#1E3A8A]">{user.role}</span>
+                </span>
+                {(user.role === 'Admin' || user.role === 'Super Admin') && (
+                  <button
+                    onClick={() => handleNav('/admin')}
+                    className="flex items-center gap-1 px-3 py-2 bg-[#1E3A8A]/5 hover:bg-[#1E3A8A]/10 text-[#1E3A8A] text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors cursor-pointer"
+                  >
+                    <LayoutDashboard size={12} />
+                    <span>Admin</span>
+                  </button>
+                )}
+                <button
+                  onClick={async () => {
+                    await logout();
+                    handleNav('/');
+                  }}
+                  className="flex items-center gap-1 px-3 py-2 border border-red-200 hover:border-red-400 text-red-500 hover:bg-red-50 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors cursor-pointer"
+                >
+                  <LogOut size={12} />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => handleNav('/login')}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[11px] font-semibold uppercase tracking-wider text-[#4A6080] hover:text-[#1E3A8A] hover:bg-[#F8FAFF] transition-colors cursor-pointer"
+              >
+                <LogIn size={13} />
+                Login
+              </button>
+            )}
             <button
               onClick={() => handleNav(ctaLink)}
               className="px-4 py-2 text-white text-[11px] font-bold uppercase tracking-wider rounded-lg transition-all duration-200 hover:-translate-y-px cursor-pointer"
@@ -322,14 +351,43 @@ export default function Navbar() {
             )
           ))}
 
-          <div className="mt-4 pt-4 border-t border-[#E2E8F5] flex flex-col gap-2">
-            <button
-              onClick={() => handleNav('/admin/login')}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-[#E2E8F5] text-[12px] font-semibold uppercase tracking-wider text-[#4A6080] hover:text-[#1E3A8A] hover:border-[#1E3A8A] hover:bg-[#F8FAFF] transition-colors cursor-pointer"
-            >
-              <LogIn size={13} />
-              Login
-            </button>
+          <div className="mt-4 pt-4 border-t border-[#E2E8F5] flex flex-col gap-2.5">
+            {user ? (
+              <div className="flex flex-col gap-2">
+                <div className="px-3.5 py-2.5 bg-[#F8FAFF] border border-[#E2E8F5] rounded-xl text-center">
+                  <p className="text-[10px] font-mono uppercase tracking-wider text-[#8A9BB8]">Logged in as</p>
+                  <p className="text-xs font-bold text-[#0F1E45] mt-0.5">{user.name}</p>
+                  <span className="inline-block mt-1 px-2.5 py-0.5 bg-[#EFF6FF] border border-[#1E3A8A]/10 rounded-full font-mono text-[9px] uppercase tracking-wider text-[#1E3A8A] font-semibold">{user.role}</span>
+                </div>
+                {(user.role === 'Admin' || user.role === 'Super Admin') && (
+                  <button
+                    onClick={() => handleNav('/admin')}
+                    className="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#1E3A8A]/5 hover:bg-[#1E3A8A]/10 text-[#1E3A8A] text-[12px] font-bold uppercase tracking-wider rounded-lg transition-colors cursor-pointer"
+                  >
+                    <LayoutDashboard size={13} />
+                    <span>Admin Dashboard</span>
+                  </button>
+                )}
+                <button
+                  onClick={async () => {
+                    await logout();
+                    handleNav('/');
+                  }}
+                  className="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 border border-red-200 text-red-500 hover:bg-red-50 text-[12px] font-bold uppercase tracking-wider rounded-lg transition-colors cursor-pointer"
+                >
+                  <LogOut size={13} />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => handleNav('/login')}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-[#E2E8F5] text-[12px] font-semibold uppercase tracking-wider text-[#4A6080] hover:text-[#1E3A8A] hover:border-[#1E3A8A] hover:bg-[#F8FAFF] transition-colors cursor-pointer"
+              >
+                <LogIn size={13} />
+                Login
+              </button>
+            )}
             <button
               onClick={() => handleNav(ctaLink)}
               className="w-full px-4 py-2.5 text-white text-[12px] font-bold uppercase tracking-wider rounded-lg transition-colors cursor-pointer text-center"

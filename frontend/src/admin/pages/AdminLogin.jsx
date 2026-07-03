@@ -42,11 +42,11 @@ function InputField({ icon: Icon, label, type = 'text', value, onChange, placeho
 }
 
 // ─── Main Component ───────────────────────────────────────────────────────────
-export default function AdminLogin() {
+export default function AdminLogin({ defaultTab = 'login' }) {
   const { login, register, user } = useAuth();
   const navigate = useNavigate();
 
-  const [tab, setTab] = useState('login'); // 'login' | 'register'
+  const [tab, setTab] = useState(defaultTab); // 'login' | 'register'
   const [showPw, setShowPw] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -56,14 +56,14 @@ export default function AdminLogin() {
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [regForm, setRegForm] = useState({ name: '', email: '', password: '', confirm: '' });
 
+  // Synchronize tab state if defaultTab prop changes
+  useEffect(() => {
+    setTab(defaultTab);
+  }, [defaultTab]);
+
   useEffect(() => {
     if (user) {
-      const adminRoles = ['admin', 'super-admin', 'editor', 'content-manager'];
-      if (adminRoles.includes(user.role) || user.permissions?.includes('all')) {
-        navigate('/admin', { replace: true });
-      } else {
-        navigate('/', { replace: true });
-      }
+      navigate('/', { replace: true });
     }
   }, [user]);
 
@@ -82,12 +82,7 @@ export default function AdminLogin() {
       const data = await login(loginForm.email, loginForm.password);
       if (rememberMe) localStorage.setItem('admin_remember_email', loginForm.email);
       else localStorage.removeItem('admin_remember_email');
-      const adminRoles = ['admin', 'super-admin', 'editor', 'content-manager'];
-      if (adminRoles.includes(data.role) || data.permissions?.includes('all')) {
-        navigate('/admin', { replace: true });
-      } else {
-        navigate('/', { replace: true });
-      }
+      navigate('/', { replace: true });
     } catch (err) {
       setError(err.message || 'Invalid credentials. Please try again.');
     } finally {
@@ -101,8 +96,8 @@ export default function AdminLogin() {
       setError('Passwords do not match.');
       return;
     }
-    if (regForm.password.length < 8) {
-      setError('Password must be at least 8 characters.');
+    if (regForm.password.length < 6) {
+      setError('Password must be at least 6 characters.');
       return;
     }
     setSubmitting(true);

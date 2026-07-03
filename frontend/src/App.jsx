@@ -173,7 +173,7 @@ function LandingPage() {
 }
 
 // ─── Admin Wrapper ─────────────────────────────────────────────────────────────
-function AdminPage({ children, minRole = 'content-manager' }) {
+function AdminPage({ children, minRole = 'Admin' }) {
   return (
     <div className="admin-dark min-h-screen bg-matte-black text-white">
       <AdminGuard minRole={minRole}>
@@ -222,21 +222,23 @@ export default function App() {
                 <Route path="/terms-conditions" element={<TermsConditions />} />
 
                 {/* Admin Auth */}
-                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin/login" element={<AdminLogin defaultTab="login" />} />
+                <Route path="/login" element={<AdminLogin defaultTab="login" />} />
+                <Route path="/signup" element={<AdminLogin defaultTab="register" />} />
 
                 {/* Admin Protected Routes */}
-                <Route path="/admin" element={<AdminPage><AdminDashboard /></AdminPage>} />
-                <Route path="/admin/products" element={<AdminPage minRole="editor"><ProductManager /></AdminPage>} />
-                <Route path="/admin/quotes" element={<AdminPage minRole="admin"><LeadManager /></AdminPage>} />
-                <Route path="/admin/careers" element={<AdminPage minRole="admin"><CareerManager /></AdminPage>} />
-                <Route path="/admin/gallery" element={<AdminPage minRole="editor"><GalleryManager /></AdminPage>} />
-                <Route path="/admin/cms" element={<AdminPage minRole="admin"><CMSBuilder /></AdminPage>} />
-                <Route path="/admin/blogs" element={<AdminPage minRole="staff"><BlogManager /></AdminPage>} />
-                <Route path="/admin/media" element={<AdminPage minRole="editor"><MediaLibrary /></AdminPage>} />
-                <Route path="/admin/builder" element={<AdminPage minRole="admin"><HomepageBuilder /></AdminPage>} />
-                <Route path="/admin/settings" element={<AdminPage minRole="admin"><SettingsPanel /></AdminPage>} />
-                <Route path="/admin/users" element={<AdminPage minRole="admin"><UserManager /></AdminPage>} />
-                <Route path="/admin/activity" element={<AdminPage minRole="admin"><ActivityLogPage /></AdminPage>} />
+                <Route path="/admin" element={<AdminPage minRole="Admin"><AdminDashboard /></AdminPage>} />
+                <Route path="/admin/products" element={<AdminPage minRole="Admin"><ProductManager /></AdminPage>} />
+                <Route path="/admin/quotes" element={<AdminPage minRole="Admin"><LeadManager /></AdminPage>} />
+                <Route path="/admin/careers" element={<AdminPage minRole="Admin"><CareerManager /></AdminPage>} />
+                <Route path="/admin/gallery" element={<AdminPage minRole="Admin"><GalleryManager /></AdminPage>} />
+                <Route path="/admin/cms" element={<AdminPage minRole="Admin"><CMSBuilder /></AdminPage>} />
+                <Route path="/admin/blogs" element={<AdminPage minRole="Admin"><BlogManager /></AdminPage>} />
+                <Route path="/admin/media" element={<AdminPage minRole="Admin"><MediaLibrary /></AdminPage>} />
+                <Route path="/admin/builder" element={<AdminPage minRole="Admin"><HomepageBuilder /></AdminPage>} />
+                <Route path="/admin/settings" element={<AdminPage minRole="Admin"><SettingsPanel /></AdminPage>} />
+                <Route path="/admin/users" element={<AdminPage minRole="Super Admin"><UserManager /></AdminPage>} />
+                <Route path="/admin/activity" element={<AdminPage minRole="Admin"><ActivityLogPage /></AdminPage>} />
 
                 {/* 404 Catch-all */}
                 <Route path="*" element={

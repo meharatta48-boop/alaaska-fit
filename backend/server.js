@@ -78,56 +78,56 @@ app.get('/api/auth/me', protect, getMe);
 // 2. Product Routes
 app.get('/api/products', getProducts);
 app.get('/api/products/:slug', getProductBySlug);
-app.post('/api/products', protect, restrictTo('admin', 'editor'), createProduct);
-app.put('/api/products/:id', protect, restrictTo('admin', 'editor'), updateProduct);
-app.delete('/api/products/:id', protect, restrictTo('admin', 'editor'), deleteProduct);
+app.post('/api/products', protect, restrictTo('Admin'), createProduct);
+app.put('/api/products/:id', protect, restrictTo('Admin'), updateProduct);
+app.delete('/api/products/:id', protect, restrictTo('Admin'), deleteProduct);
 
 // 3. Quote / Lead Routes
 app.post('/api/quotes', createQuote);
-app.get('/api/quotes', protect, restrictTo('admin'), getQuotes);
-app.put('/api/quotes/:id', protect, restrictTo('admin'), updateQuoteStatus);
-app.delete('/api/quotes/:id', protect, restrictTo('admin'), deleteQuote);
+app.get('/api/quotes', protect, restrictTo('Admin'), getQuotes);
+app.put('/api/quotes/:id', protect, restrictTo('Admin'), updateQuoteStatus);
+app.delete('/api/quotes/:id', protect, restrictTo('Admin'), deleteQuote);
 
 // New Inquiries & Contact & Newsletter Routes
 app.post('/api/contacts', createContact);
-app.get('/api/contacts', protect, restrictTo('admin'), getContacts);
-app.put('/api/contacts/:id', protect, restrictTo('admin'), updateContactStatus);
-app.delete('/api/contacts/:id', protect, restrictTo('admin'), deleteContact);
+app.get('/api/contacts', protect, restrictTo('Admin'), getContacts);
+app.put('/api/contacts/:id', protect, restrictTo('Admin'), updateContactStatus);
+app.delete('/api/contacts/:id', protect, restrictTo('Admin'), deleteContact);
 
 app.post('/api/newsletters', createNewsletter);
-app.get('/api/newsletters', protect, restrictTo('admin'), getNewsletters);
-app.delete('/api/newsletters/:id', protect, restrictTo('admin'), deleteNewsletter);
+app.get('/api/newsletters', protect, restrictTo('Admin'), getNewsletters);
+app.delete('/api/newsletters/:id', protect, restrictTo('Admin'), deleteNewsletter);
 
 // Careers / Job Applications Routes
 app.post('/api/careers', submitApplication);
-app.get('/api/careers', protect, restrictTo('admin'), getApplications);
-app.put('/api/careers/:id', protect, restrictTo('admin'), updateApplicationStatus);
-app.delete('/api/careers/:id', protect, restrictTo('admin'), deleteApplication);
+app.get('/api/careers', protect, restrictTo('Admin'), getApplications);
+app.put('/api/careers/:id', protect, restrictTo('Admin'), updateApplicationStatus);
+app.delete('/api/careers/:id', protect, restrictTo('Admin'), deleteApplication);
 
 // 4. CMS Blog Routes
 app.get('/api/blogs', getBlogs);
 app.get('/api/blogs/:slug', getBlogBySlug);
-app.post('/api/blogs', protect, restrictTo('admin', 'editor', 'content-manager'), createBlog);
-app.put('/api/blogs/:id', protect, restrictTo('admin', 'editor', 'content-manager'), updateBlog);
-app.delete('/api/blogs/:id', protect, restrictTo('admin', 'editor', 'content-manager'), deleteBlog);
+app.post('/api/blogs', protect, restrictTo('Admin'), createBlog);
+app.put('/api/blogs/:id', protect, restrictTo('Admin'), updateBlog);
+app.delete('/api/blogs/:id', protect, restrictTo('Admin'), deleteBlog);
 
 // 5. Config / Homepage Builder Routes
 app.get('/api/config', getAllConfigs);
 app.get('/api/config/:key', getConfig);
-app.put('/api/config/:key', protect, restrictTo('admin'), updateConfig);
+app.put('/api/config/:key', protect, restrictTo('Admin'), updateConfig);
 
 // 6. Media Library Routes
-app.get('/api/media', protect, restrictTo('admin', 'editor'), getMedia);
-app.post('/api/media', protect, restrictTo('admin', 'editor'), uploadMedia);
-app.delete('/api/media/:id', protect, restrictTo('admin', 'editor'), deleteMedia);
+app.get('/api/media', protect, restrictTo('Admin'), getMedia);
+app.post('/api/media', protect, restrictTo('Admin'), uploadMedia);
+app.delete('/api/media/:id', protect, restrictTo('Admin'), deleteMedia);
 
 // 7. Dashboard Analytics Route
-app.get('/api/analytics', protect, restrictTo('admin'), getDashboardAnalytics);
+app.get('/api/analytics', protect, restrictTo('Admin'), getDashboardAnalytics);
 
 // 8. User Management Routes
-app.get('/api/users', protect, restrictTo('admin'), getUsers);
-app.put('/api/users/:id/role', protect, restrictTo('super-admin', 'admin'), updateUserRole);
-app.delete('/api/users/:id', protect, restrictTo('super-admin', 'admin'), deleteUser);
+app.get('/api/users', protect, restrictTo('Admin'), getUsers);
+app.put('/api/users/:id/role', protect, restrictTo('Super Admin'), updateUserRole);
+app.delete('/api/users/:id', protect, restrictTo('Super Admin'), deleteUser);
 
 // Fallback Route & Error Handling
 app.use(notFound);

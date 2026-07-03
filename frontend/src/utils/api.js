@@ -55,6 +55,7 @@ export const apiFetch = async (endpoint, options = {}) => {
         // Refresh token expired/failed, delete memory & cookies
         console.warn('Refresh token failed. User must log in again.');
         setAccessToken('');
+        window.dispatchEvent(new CustomEvent('auth-failure'));
       }
     }
 
