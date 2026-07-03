@@ -1,0 +1,531 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+/* stylelint-disable at-rule-no-unknown */
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', sans-serif;
+  --font-mono: 'Space Grotesk', monospace;
+
+  /* ─── Navy Blue Brand Palette ─── */
+  --color-navy-950: #060D1F;
+  --color-navy-900: #0F1E45;
+  --color-navy-800: #162A5E;
+  --color-navy-700: #1E3A8A;
+  --color-navy-600: #2150B8;
+  --color-navy-500: #2563EB;
+  --color-navy-400: #3B82F6;
+  --color-navy-300: #93C5FD;
+  --color-navy-200: #BFDBFE;
+  --color-navy-100: #DBEAFE;
+  --color-navy-50:  #EFF6FF;
+
+  /* ─── Gold Accent ─── */
+  --color-gold-400: #D4AF37;
+  --color-gold-500: #C5A028;
+  --color-gold-300: #E2C55A;
+
+  /* ─── Site Background Tokens (Light) ─── */
+  --color-matte-black: #F8FAFF;   /* Page bg — very light blue-white */
+  --color-matte-gray:  #F0F4FC;   /* Alternate section bg */
+  --color-matte-border: #E2E8F5;  /* Borders */
+  --color-matte-text:  #6B7EA0;   /* Muted text */
+}
+
+/* ─── Root Variables ─── */
+:root {
+  /* Backgrounds */
+  --bg-page: #FFFFFF;
+  --bg-alt: #F9FAFB;
+  --bg-card: #FFFFFF;
+  --bg-input: #FFFFFF;
+
+  /* Text */
+  --text-primary: #1A1A1A;      /* Dark charcoal */
+  --text-secondary: #4A4A4A;    /* Medium gray */
+  --text-muted: #888888;        /* Soft gray */
+  --text-inverse: #FFFFFF;
+  --text-heading: #111111;
+
+  /* Borders */
+  --border-default: #E5E7EB;
+  --border-focus: #1E3A8A;
+  --border-card: #F3F4F6;
+
+  /* Accent */
+  --accent: #1E3A8A;
+  --accent-hover: #162A5E;
+  --accent-light: #EFF6FF;
+  --gold: #D4AF37;
+  --gold-hover: #C5A028;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Status */
+  --success: #10B981;
+  --success-bg: #ECFDF5;
+  --warning: #F59E0B;
+  --warning-bg: #FFFBEB;
+  --error: #EF4444;
+  --error-bg: #FEF2F2;
+  --info: #3B82F6;
+  --info-bg: #EFF6FF;
+}
+
+/* ─── Force Light Mode Universally ─── */
+html { scroll-behavior: smooth; }
+html, html.light-mode { background-color: var(--bg-page) !important; color: var(--text-primary) !important; }
+html.dark { background-color: var(--bg-page) !important; color: var(--text-primary) !important; }
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Custom Scrollbar ─── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #F0F4FC; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #1E3A8A; }
+
+/* ─── Selection ─── */
+::selection { background: rgba(30,58,138,0.15); color: #0F1E45; }
+
+/* ─── Transition Reset ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ─── Page & Section Backgrounds (LIGHT ONLY) ─── */
+.page-wrapper {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+.section-white  { background-color: #FFFFFF; }
+.section-alt    { background-color: #F8FAFF; }
+.section-navy   { background-color: #0F1E45; color: #FFFFFF; }
+
+/* ─── Section Divider ─── */
+.section-divider { height: 1px; background: linear-gradient(to right, transparent, #E2E8F5, transparent); }
+
+/* ─── Hero always uses text-white (dark overlay on video) ─── */
+#hero { color: white !important; }
+#hero [class*="text-white"] { color: white !important; }
+#hero h1, #hero h2, #hero h3, #hero p { color: white !important; }
+
+/* ─── Glassmorphism (LIGHT) ─── */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 245, 0.9);
+}
+.glass-panel-navy {
+  background: rgba(15, 30, 69, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.glass-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-card);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-lg);
+  transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+}
+.glass-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-3px);
+  border-color: rgba(30, 58, 138, 0.2);
+}
+
+/* ─── Premium Card ─── */
+.premium-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.premium-card:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-4px);
+  border-color: rgba(30,58,138,0.18);
+}
+
+/* ─── ADMIN PANEL stays dark ─── */
+.admin-dark {
+  --color-matte-black: #0a0a0a;
+  --color-matte-gray: #121212;
+  --color-matte-border: #252525;
+  --color-matte-text: #8c8c8c;
+  --color-gold-400: #d4af37;
+  --color-gold-300: #dfba2b;
+  --color-gold-500: #b59329;
+  background-color: #0a0a0a !important;
+  color: #FFFFFF !important;
+}
+.admin-dark .glass-card {
+  background: rgba(22, 22, 22, 0.85) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+}
+.admin-dark .glass-card:hover {
+  border-color: rgba(212,175,55,0.25) !important;
+  box-shadow: 0 12px 40px rgba(212,175,55,0.06) !important;
+}
+.admin-dark .glass-panel {
+  background: rgba(18,18,18,0.85) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+.admin-dark [class*="text-white"] { color: white !important; }
+.admin-dark input, .admin-dark textarea, .admin-dark select {
+  color: white !important;
+  background-color: #0a0a0a !important;
+  border-color: #252525 !important;
+}
+
+/* ─── Buttons ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: var(--radius-md);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #FFFFFF;
+  padding: 0.75rem 1.75rem;
+  box-shadow: 0 4px 14px rgba(30,58,138,0.25);
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 6px 20px rgba(30,58,138,0.35);
+  transform: translateY(-1px);
+}
+.btn-gold {
+  background: var(--gold);
+  color: #0F1E45;
+  padding: 0.75rem 1.75rem;
+  box-shadow: 0 4px 14px rgba(212,175,55,0.25);
+}
+.btn-gold:hover {
+  background: var(--gold-hover);
+  box-shadow: 0 6px 20px rgba(212,175,55,0.35);
+  transform: translateY(-1px);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--accent);
+  border: 1.5px solid var(--border-default);
+  padding: 0.75rem 1.75rem;
+}
+.btn-outline:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 0.6rem 1rem;
+}
+.btn-ghost:hover { color: var(--accent); background: var(--accent-light); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+/* ─── Form Styles ─── */
+.label-style {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.70rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+.input-style {
+  display: block;
+  width: 100%;
+  background-color: var(--bg-input);
+  border: 1.5px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 1rem;
+  font-size: 0.875rem;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.input-style:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(30,58,138,0.10);
+}
+.input-style::placeholder { color: #B0BFDA; }
+.input-style:disabled { opacity: 0.5; cursor: not-allowed; background: #F8FAFF; }
+select.input-style { cursor: pointer; }
+
+/* ─── Status Messages ─── */
+.msg-success { background: var(--success-bg); color: #065F46; border: 1px solid #A7F3D0; border-radius: var(--radius-sm); }
+.msg-error   { background: var(--error-bg);   color: #991B1B; border: 1px solid #FECACA; border-radius: var(--radius-sm); }
+.msg-warning { background: var(--warning-bg); color: #92400E; border: 1px solid #FDE68A; border-radius: var(--radius-sm); }
+.msg-info    { background: var(--info-bg);    color: #1E40AF; border: 1px solid #BFDBFE; border-radius: var(--radius-sm); }
+
+/* ─── Typography ─── */
+.heading-xl  { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1.05; letter-spacing: -0.02em; color: var(--text-primary); }
+.heading-lg  { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: clamp(1.75rem, 3vw, 3rem);  line-height: 1.1; letter-spacing: -0.01em; color: var(--text-primary); }
+.heading-md  { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: clamp(1.25rem, 2vw, 1.75rem); line-height: 1.2; color: var(--text-primary); }
+.eyebrow     { font-family: 'Space Grotesk', monospace; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
+.body-lg     { font-size: 1.0625rem; line-height: 1.75; color: var(--text-secondary); }
+.body-md     { font-size: 0.9375rem; line-height: 1.7;  color: var(--text-secondary); }
+.body-sm     { font-size: 0.8125rem; line-height: 1.65; color: var(--text-muted); }
+
+/* ─── Shimmer (Navy for light sections) ─── */
+.shimmer-text {
+  background: linear-gradient(to right, #0F1E45 15%, #2563EB 42%, #1E3A8A 58%, #2563EB 76%, #0F1E45 95%);
+  background-size: 200% auto;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: shine 3.5s linear infinite;
+}
+/* White shimmer (for navy/dark sections) */
+.shimmer-text-white {
+  background: linear-gradient(to right, #ffffff 15%, #93C5FD 40%, #ffffff 60%, #93C5FD 80%, #ffffff 95%);
+  background-size: 200% auto;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: shine 3s linear infinite;
+}
+@keyframes shine { to { background-position: 200% center; } }
+
+/* ─── Badge ─── */
+.badge {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.3rem 0.85rem; border-radius: var(--radius-full);
+  font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  border: 1px solid transparent;
+}
+.badge-navy   { background: #EFF6FF; color: #1E3A8A; border-color: #BFDBFE; }
+.badge-gold   { background: #FFFBEB; color: #92400E; border-color: #FDE68A; }
+.badge-green  { background: #ECFDF5; color: #065F46; border-color: #A7F3D0; }
+.badge-red    { background: #FEF2F2; color: #991B1B; border-color: #FECACA; }
+
+/* ─── Star Rating ─── */
+.star-filled { color: #D4AF37; fill: #D4AF37; }
+.star-empty  { color: #E2E8F5; fill: #E2E8F5; }
+
+/* ─── Section Spacing ─── */
+.section-padding { padding-top: 5rem; padding-bottom: 5rem; }
+@media (min-width: 768px) { .section-padding { padding-top: 7rem; padding-bottom: 7rem; } }
+
+/* ─── Marquee ─── */
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.animate-marquee { animation: marquee 28s linear infinite; }
+.animate-marquee:hover { animation-play-state: paused; }
+
+/* ─── Fade up animation ─── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.fade-up { animation: fadeUp 0.6s ease forwards; }
+
+/* ─── Utilities ─── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.navy-glow  { box-shadow: 0 0 40px rgba(30,58,138,0.12), 0 0 80px rgba(30,58,138,0.05); }
+.gold-glow  { box-shadow: 0 0 30px rgba(212,175,55,0.20); }
+.accent-line { height: 2px; background: linear-gradient(to right, transparent, #1E3A8A 40%, #D4AF37 60%, transparent); }
+.map-container iframe { width: 100%; height: 100%; border: none; }
+[dir="rtl"] { font-family: 'Outfit', sans-serif; }
+
+/* ─── Dynamic Tailwind Utility Class Overrides (for instant color changes) ─── */
+[class*="text-[#0F1E45]"] { color: var(--text-primary) !important; }
+[class*="text-navy-900"] { color: var(--text-primary) !important; }
+[class*="bg-[#0F1E45]"] { background-color: var(--accent) !important; }
+[class*="bg-navy-900"] { background-color: var(--accent) !important; }
+[class*="text-[#1E3A8A]"] { color: var(--accent) !important; }
+[class*="bg-[#1E3A8A]"] { background-color: var(--accent) !important; }
+[class*="hover:bg-[#162A5E]"]:hover { background-color: var(--accent-hover) !important; }
+[class*="border-[#1E3A8A]"] { border-color: var(--accent) !important; }
+[class*="border-[#E2E8F5]"] { border-color: var(--border-default) !important; }
+[class*="bg-[#F8FAFF]"] { background-color: var(--bg-alt) !important; }
+[class*="from-[#1E3A8A]"] { --tw-gradient-from: var(--accent) !important; }
+[class*="to-[#2563EB]"] { --tw-gradient-to: var(--accent-hover) !important; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PUBLIC PAGE LIGHT-THEME SECTION OVERRIDES
+   Since --color-matte-black (#F8FAFF) and --color-matte-gray (#F0F4FC) are
+   LIGHT in the public theme, all text inside these sections must be DARK.
+   This fixes white-on-white text throughout the homepage sections.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* All sections on the public landing page */
+.landing-page section,
+.landing-page main > * {
+  color: var(--text-primary);
+}
+
+/* ── Section backgrounds: remap dark→light & fix borders ───────────────── */
+.landing-page .bg-matte-black,
+.landing-page [class*="bg-matte-black"] {
+  background-color: #F8FAFF !important;
+}
+.landing-page .bg-matte-gray,
+.landing-page [class*="bg-matte-gray"] {
+  background-color: #F0F4FC !important;
+}
+.landing-page .border-matte-border,
+.landing-page [class*="border-matte-border"] {
+  border-color: #E2E8F5 !important;
+}
+
+/* ── Fix all white text in public sections ─────────────────────────────── */
+.landing-page .text-white,
+.landing-page [class*="text-white"] {
+  color: var(--text-primary) !important;
+}
+/* Exception: text inside genuinely dark-bg elements stays white */
+.landing-page [style*="background-color: #"] .text-white,
+.landing-page [class*="bg-[#1E3A8A]"] .text-white,
+.landing-page [class*="bg-[#0F1E45]"] .text-white,
+.landing-page [class*="bg-navy"] .text-white,
+.landing-page [class*="bg-gold"] .text-white,
+.landing-page .bg-gold-400 .text-white,
+.landing-page .bg-gold-400 [class*="text-white"],
+.landing-page [class*="bg-[#D4AF37]"] .text-white {
+  color: #000000 !important;
+}
+/* Buttons with dark/navy backgrounds keep white text */
+.landing-page button[class*="bg-[#1E3A8A]"],
+.landing-page a[class*="bg-[#1E3A8A]"],
+.landing-page button[class*="bg-navy"],
+.landing-page button.bg-gold-400,
+.landing-page a.bg-gold-400 {
+  color: white !important;
+}
+.landing-page button.bg-gold-400,
+.landing-page a.bg-gold-400 {
+  color: #000 !important;
+}
+
+/* ── Fix muted text (matte-text → proper medium gray) ──────────────────── */
+.landing-page .text-matte-text,
+.landing-page [class*="text-matte-text"] {
+  color: #6B7EA0 !important;
+}
+
+/* ── Fix input fields inside public sections ───────────────────────────── */
+.landing-page input,
+.landing-page textarea,
+.landing-page select {
+  background-color: #FFFFFF !important;
+  color: var(--text-primary) !important;
+  border-color: #D1D9EE !important;
+}
+.landing-page input::placeholder,
+.landing-page textarea::placeholder {
+  color: #A0AEC0 !important;
+}
+.landing-page input:focus,
+.landing-page textarea:focus,
+.landing-page select:focus {
+  border-color: var(--accent) !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(30,58,138,0.10) !important;
+}
+
+/* ── Fix headings in public sections ───────────────────────────────────── */
+.landing-page h1,
+.landing-page h2,
+.landing-page h3,
+.landing-page h4 {
+  color: var(--text-primary);
+}
+
+/* ── Fix semi-transparent white backgrounds ────────────────────────────── */
+.landing-page [class*="bg-white/"],
+.landing-page [class*="bg-black/"] {
+  /* leave as-is — these are overlays on media/images */
+}
+
+/* ── Products section: card text on light bg ───────────────────────────── */
+#products .text-white { color: var(--text-primary) !important; }
+#products h3.text-white { color: var(--text-primary) !important; }
+
+/* ── ProcessTimeline section ───────────────────────────────────────────── */
+#process h2.text-white,
+#process h3.text-white,
+#process span.text-white { color: var(--text-primary) !important; }
+/* Active step (gold bg) keeps black text */
+#process .bg-gold-400 * { color: #000 !important; }
+/* Inactive step text */
+#process button.text-white { color: var(--text-primary) !important; }
+
+/* ── QuoteBuilder section ──────────────────────────────────────────────── */
+#quote h2.text-white,
+#quote h3.text-white { color: var(--text-primary) !important; }
+#quote .text-white { color: var(--text-primary) !important; }
+
+/* ── Testimonials section ──────────────────────────────────────────────── */
+#testimonials { background-color: #F0F4FC !important; }
+#testimonials .text-white { color: var(--text-primary) !important; }
+#testimonials h2.text-white { color: var(--text-primary) !important; }
+
+/* ── PrivateLabel section ──────────────────────────────────────────────── */
+#privatelabel { background-color: #F0F4FC !important; }
+#privatelabel .text-white { color: var(--text-primary) !important; }
+#privatelabel h2.text-white,
+#privatelabel h3.text-white { color: var(--text-primary) !important; }
+
+/* ── Contact section ───────────────────────────────────────────────────── */
+#contact { background-color: #F8FAFF !important; }
+#contact .text-white { color: var(--text-primary) !important; }
+#contact h2.text-white { color: var(--text-primary) !important; }
+/* Contact info text (email, phone, address) */
+#contact p.text-white { color: var(--text-primary) !important; }
+
+/* ── FactoryGallery section ────────────────────────────────────────────── */
+#factory h3.text-white,
+#factory .text-white { color: var(--text-primary) !important; }
+/* Keep white text inside the dark image overlay */
+#factory .absolute .text-white { color: white !important; }
+
+/* ── FAQ section ───────────────────────────────────────────────────────── */
+#faq h2.text-white,
+#faq .text-white { color: var(--text-primary) !important; }
+
+/* ── Blog section ──────────────────────────────────────────────────────── */
+#blog h2.text-white,
+#blog .text-white { color: var(--text-primary) !important; }
+
+/* ── Hero section EXCEPTION: keep all white (dark video bg) ─────────────  */
+#hero,
+#hero * {
+  /* hero has a dark overlay so white text is correct — preserve it */
+}
+#hero .text-white { color: white !important; }
+#hero [class*="text-white"] { color: white !important; }
