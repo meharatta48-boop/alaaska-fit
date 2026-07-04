@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState, memo } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 // Context Providers
@@ -110,7 +110,7 @@ function DynamicHead() {
 }
 
 // ─── Landing Page ─────────────────────────────────────────────────────────────
-function LandingPage() {
+const LandingPage = memo(function LandingPage() {
   const { config, loading } = useConfig();
 
   if (loading && !config) {
@@ -174,7 +174,7 @@ function LandingPage() {
       <CommandPalette />
     </div>
   );
-}
+});
 
 // ─── Admin Wrapper ─────────────────────────────────────────────────────────────
 function AdminPage({ children, minRole = 'Admin' }) {

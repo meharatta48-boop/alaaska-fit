@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
+import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 
@@ -29,8 +30,19 @@ connectDB();
 
 const app = express();
 
+app.use(compression({
+  level: 6,
+  threshold: 1024,
+  filter: (req, res) => {
+    if (req.headers['x-no-compression']) return false;
+    return compression.filter(req, res);
+  }
+}));
+
 // Security Headers
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false,
+}));
 
 // CORS config
 const ALLOWED_ORIGINS = [
@@ -68,10 +80,16 @@ const apiLimiter = rateLimit({
 });
 app.use('/api/', apiLimiter);
 
-// Health Check
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'public, max-age=300, s-maxage=600');
+  next();
+});
+
 app.get('/api/health', (req, res) => {
+  res.set('Cache-Control', 'no-store');
   res.json({ status: 'ok', service: 'alaaska-fit-api' });
 });
+
 
 // --- API ROUTES ---
 

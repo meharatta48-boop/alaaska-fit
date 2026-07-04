@@ -117,6 +117,7 @@ export default function ContactUs() {
                   title="Factory Map View"
                   allowFullScreen
                   loading="lazy"
+                  decoding="async"
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>

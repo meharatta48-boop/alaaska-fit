@@ -58,6 +58,10 @@ const ProductSchema = new mongoose.Schema({
   }]
 }, { timestamps: true });
 
+ProductSchema.index({ slug: 1, status: 1 });
+ProductSchema.index({ category: 1, isFeatured: 1, status: 1 });
+ProductSchema.index({ createdAt: -1 });
+
 // Quote/Inquiry Schema
 const QuoteSchema = new mongoose.Schema({
   productType: { type: String, required: true },
@@ -132,6 +136,9 @@ const BlogPostSchema = new mongoose.Schema({
   seoTitle: { type: String },
   seoDescription: { type: String }
 }, { timestamps: true });
+
+BlogPostSchema.index({ slug: 1, status: 1 });
+BlogPostSchema.index({ publishDate: -1, createdAt: -1 });
 
 // Config Schema (For Homepage Builder & General Settings)
 const ConfigSchema = new mongoose.Schema({

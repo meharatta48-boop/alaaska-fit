@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext.jsx';
+import { useConfig } from '../context/ConfigContext.jsx';
 import { Mail, Phone, MapPin } from 'lucide-react';
-import { apiFetch } from '../utils/api.js';
 
 const Instagram = ({ size = 18 }) => (
   <svg
@@ -59,24 +59,17 @@ const Facebook = ({ size = 18 }) => (
 
 export default function Footer() {
   const { t, isRTL } = useLanguage();
+  const { config } = useConfig();
   const currentYear = new Date().getFullYear();
-  const [config, setConfig] = useState(null);
 
-  useEffect(() => {
-    apiFetch('/config/settings')
-      .then(data => {
-        if (data) setConfig(data);
-      })
-      .catch(() => { });
-  }, []);
-
-  const logoUrl = config?.siteLogo || '';
-  const footerConfig = config?.footer || {};
-  const socialLinks = config?.socialLinks || {};
-  const companyName = config?.companyName || config?.siteName || 'Al Aaska Fit';
+  const settings = config?.settings || {};
+  const logoUrl = settings.siteLogo || '';
+  const footerConfig = settings.footer || {};
+  const socialLinks = settings.socialLinks || {};
+  const companyName = settings.companyName || settings.siteName || 'Al Aaska Fit';
 
   return (
-    <footer className="bg-gradient-to-br from-[#60A5FA] via-[#3B82F6] to-[#1D4ED8] pt-16 pb-8 text-white">
+    <footer className="bg-gradient-to-br from-[#60A5FA] via-[#3B82F6] to-[#1D4ED8] pt-16 pb-8 text-white" style={{ color: '#ffffff' }}>
       <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 font-sans mb-12">
 
         {/* Info Column */}
@@ -94,21 +87,21 @@ export default function Footer() {
                 {companyName}
               </span>
               <span className="text-[8px] font-mono tracking-[0.35em] uppercase text-white/80 font-light">
-                {config?.siteTagline || 'Textile Factory'}
+                {settings.siteTagline || 'Textile Factory'}
               </span>
             </div>
           </div>
-          <p className="text-xs text-white/80 leading-relaxed mb-6">
+          <p className="text-xs text-white/80 leading-relaxed mb-6" style={{ color: '#ffffff' }}>
             {footerConfig.aboutText || 'Enterprise-grade private-label apparel manufacturer. Sourcing, sewing, embroidery, and packaging luxury blanks for premium global labels and streetwear brands.'}
           </p>
           <div className="flex gap-4">
-            <a href={socialLinks.instagram || 'https://instagram.com'} target="_blank" rel="noopener noreferrer" className="text-matte-text hover:text-gold-400 transition-colors">
+            <a href={socialLinks.instagram || 'https://instagram.com'} target="_blank" rel="noopener noreferrer" className="hover:text-[#FACC15] transition-colors" style={{ color: '#ffffff' }}>
               <Instagram size={18} />
             </a>
-            <a href={socialLinks.linkedin || 'https://linkedin.com'} target="_blank" rel="noopener noreferrer" className="text-matte-text hover:text-gold-400 transition-colors">
+            <a href={socialLinks.linkedin || 'https://linkedin.com'} target="_blank" rel="noopener noreferrer" className="hover:text-[#FACC15] transition-colors" style={{ color: '#ffffff' }}>
               <Linkedin size={18} />
             </a>
-            <a href={socialLinks.facebook || 'https://facebook.com'} target="_blank" rel="noopener noreferrer" className="text-matte-text hover:text-gold-400 transition-colors">
+            <a href={socialLinks.facebook || 'https://facebook.com'} target="_blank" rel="noopener noreferrer" className="hover:text-[#FACC15] transition-colors" style={{ color: '#ffffff' }}>
               <Facebook size={18} />
             </a>
           </div>
@@ -116,10 +109,10 @@ export default function Footer() {
 
         {/* Categories Column */}
         <div className={isRTL ? 'text-right' : 'text-left'}>
-          <h3 className="font-display font-semibold text-sm tracking-wider text-gold-400 mb-6 uppercase">
+          <h3 className="font-display font-semibold text-sm tracking-wider mb-6 uppercase" style={{ color: '#FACC15' }}>
             {t('navProducts')}
           </h3>
-          <ul className="space-y-3 text-xs text-matte-text">
+          <ul className="space-y-3 text-xs" style={{ color: '#ffffff' }}>
             <li><span className="hover:text-white transition-colors">Oversized T-Shirts</span></li>
             <li><span className="hover:text-white transition-colors">Heavyweight Hoodies</span></li>
             <li><span className="hover:text-white transition-colors">Premium Tracksuits</span></li>
@@ -130,10 +123,10 @@ export default function Footer() {
 
         {/* Process Steps Column */}
         <div className={isRTL ? 'text-right' : 'text-left'}>
-          <h3 className="font-display font-semibold text-sm tracking-wider text-gold-400 mb-6 uppercase">
+          <h3 className="font-display font-semibold text-sm tracking-wider mb-6 uppercase" style={{ color: '#FACC15' }}>
             {t('navProcess')}
           </h3>
-          <ul className="space-y-3 text-xs text-matte-text">
+          <ul className="space-y-3 text-xs" style={{ color: '#ffffff' }}>
             <li><span className="hover:text-white transition-colors">1. Design Consultation</span></li>
             <li><span className="hover:text-white transition-colors">2. Fabric Sourcing</span></li>
             <li><span className="hover:text-white transition-colors">3. Custom Sampling</span></li>
@@ -144,21 +137,21 @@ export default function Footer() {
 
         {/* Contact Column */}
         <div className={isRTL ? 'text-right' : 'text-left'}>
-          <h3 className="font-display font-semibold text-sm tracking-wider text-gold-400 mb-6 uppercase">
+          <h3 className="font-display font-semibold text-sm tracking-wider mb-6 uppercase" style={{ color: '#FACC15' }}>
             {t('navContact')}
           </h3>
-          <ul className="space-y-4 text-xs text-matte-text">
+          <ul className="space-y-4 text-xs" style={{ color: '#ffffff' }}>
             <li className="flex items-center gap-3 justify-start">
-              <Mail size={16} className="text-gold-400 shrink-0" />
-              <span>{config?.contactEmail || 'production@alaaskafit.com'}</span>
+              <Mail size={16} className="shrink-0" style={{ color: '#FACC15' }} />
+              <span>{settings.contactEmail || 'production@alaaskafit.com'}</span>
             </li>
             <li className="flex items-center gap-3 justify-start">
-              <Phone size={16} className="text-gold-400 shrink-0" />
-              <span dir="ltr">{config?.contactPhone || '+92 300 1234567'}</span>
+              <Phone size={16} className="shrink-0" style={{ color: '#FACC15' }} />
+              <span dir="ltr">{settings.contactPhone || '+92 300 1234567'}</span>
             </li>
             <li className="flex items-start gap-3 justify-start">
-              <MapPin size={16} className="text-gold-400 shrink-0 mt-0.5" />
-              <span>{config?.factoryAddress || 'Industrial Zone Block A, Karachi, Pakistan'}</span>
+              <MapPin size={16} className="shrink-0 mt-0.5" style={{ color: '#FACC15' }} />
+              <span>{settings.factoryAddress || 'Industrial Zone Block A, Karachi, Pakistan'}</span>
             </li>
           </ul>
         </div>

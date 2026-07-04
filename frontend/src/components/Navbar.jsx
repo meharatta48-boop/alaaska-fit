@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext.jsx';
 import { ChevronDown, Menu, X, LogIn, ArrowRight, LogOut, LayoutDashboard } from 'lucide-react';
@@ -63,6 +63,8 @@ export default function Navbar() {
   // CTA from config
   const ctaText = headerConfig.ctaText || 'Get Quote';
   const ctaLink = headerConfig.ctaLink || '/quote';
+  const logoSrc = settings.siteLogo || '';
+  const logoPreload = useMemo(() => logoSrc ? [{ href: logoSrc, as: 'image' }] : [], [logoSrc]);
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -74,6 +76,16 @@ export default function Navbar() {
   const location = useLocation();
 
   const announcementVisible = showAnnouncement && !announcementDismissed;
+
+  useEffect(() => {
+    if (!logoSrc) return;
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = logoSrc;
+    document.head.appendChild(link);
+    return () => document.head.removeChild(link);
+  }, [logoSrc]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -145,6 +157,9 @@ export default function Navbar() {
                 src={settings.siteLogo}
                 alt={settings.siteName || 'Logo'}
                 className="object-contain transition-all"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
                 style={{
                   width: branding.navbarLogoWidth ? `${branding.navbarLogoWidth}px` : 'auto',
                   height: branding.navbarLogoHeight ? `${branding.navbarLogoHeight}px` : '2.25rem',

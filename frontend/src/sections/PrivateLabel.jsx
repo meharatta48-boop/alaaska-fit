@@ -97,6 +97,8 @@ export default function PrivateLabel() {
                 {/* Image */}
                 <div className="relative h-48 overflow-hidden">
                   <img
+                    loading="lazy"
+                    decoding="async"
                     src={feature.image}
                     alt={feature.title}
                     className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"

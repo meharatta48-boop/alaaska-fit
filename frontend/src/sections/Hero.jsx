@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Play, ShieldCheck, Zap, Award, Star } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -22,6 +22,11 @@ export default function Hero({ config }) {
   const showTrustRow = config?.showTrustRow !== false;
   const videoUrl = config?.bgVideoUrl || 'https://assets.mixkit.co/videos/preview/mixkit-sewing-machine-stitching-a-fabric-41712-large.mp4';
   const fallbackImg = config?.bgFallbackImageUrl || 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1920&auto=format&fit=crop&q=80';
+  const trustImages = useMemo(() => [
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&auto=format&fit=crop',
+  ], []);
 
   const motionVariants = {
     slide: { initial: { opacity: 0, x: -40 }, animate: { opacity: 1, x: 0 }, transition: { duration: 0.9, ease: [0.25, 0.8, 0.25, 1] } },
@@ -47,6 +52,26 @@ export default function Hero({ config }) {
     : preset === 'immersive'
       ? 'border-white/30 text-white hover:bg-white/10'
       : 'border-[#E2E8F5] text-[#1E3A8A] hover:bg-[#EFF6FF]';
+
+  useEffect(() => {
+    const preloadLink = document.createElement('link');
+    preloadLink.rel = 'preload';
+    preloadLink.as = 'image';
+    preloadLink.href = fallbackImg;
+    document.head.appendChild(preloadLink);
+
+    const heroFontLink = document.createElement('link');
+    heroFontLink.rel = 'preload';
+    heroFontLink.as = 'font';
+    heroFontLink.crossOrigin = 'anonymous';
+    heroFontLink.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap';
+    document.head.appendChild(heroFontLink);
+
+    return () => {
+      document.head.removeChild(preloadLink);
+      document.head.removeChild(heroFontLink);
+    };
+  }, [fallbackImg]);
 
   const goTo = (path) => {
     navigate(path);
@@ -164,10 +189,8 @@ export default function Hero({ config }) {
             {/* Trust row */}
             {showTrustRow && <div className="flex items-center gap-4">
               <div className="flex -space-x-2">
-                {['https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&auto=format&fit=crop',
-                  'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&auto=format&fit=crop',
-                  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&auto=format&fit=crop'].map((src, i) => (
-                  <img key={i} src={src} alt="" className="w-7 h-7 rounded-full border-2 border-white object-cover" />
+                {trustImages.map((src, i) => (
+                  <img key={i} src={src} alt="" className="w-7 h-7 rounded-full border-2 border-white object-cover" loading="lazy" decoding="async" />
                 ))}
               </div>
               <div>
@@ -197,6 +220,7 @@ export default function Hero({ config }) {
                   <video
                     autoPlay loop muted playsInline
                     poster={fallbackImg}
+                    preload="metadata"
                     className="w-full h-full object-cover"
                   >
                     <source src={videoUrl} type="video/mp4" />
