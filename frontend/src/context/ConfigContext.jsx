@@ -28,6 +28,8 @@ const fallbackConfig = {
 export const ConfigProvider = ({ children }) => {
   const [config, setConfig] = useState(fallbackConfig);
   const [loading, setLoading] = useState(true);
+  const loadingRef = useRef(true);
+  const fallbackTimerRef = useRef(null);
 
   const refreshConfig = async () => {
     try {
@@ -43,6 +45,11 @@ export const ConfigProvider = ({ children }) => {
       applyDynamicHead(fallbackConfig.settings);
     } finally {
       setLoading(false);
+      loadingRef.current = false;
+      if (fallbackTimerRef.current) {
+        clearTimeout(fallbackTimerRef.current);
+        fallbackTimerRef.current = null;
+      }
     }
   };
 
@@ -176,18 +183,24 @@ export const ConfigProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const fallbackTimer = setTimeout(() => {
-      if (loading) {
+    fallbackTimerRef.current = setTimeout(() => {
+      if (loadingRef.current) {
         setConfig(fallbackConfig);
         applyThemeColors(fallbackConfig.settings);
         applyDynamicHead(fallbackConfig.settings);
         setLoading(false);
+        loadingRef.current = false;
       }
     }, 6000);
 
     refreshConfig();
 
-    return () => clearTimeout(fallbackTimer);
+    return () => {
+      if (fallbackTimerRef.current) {
+        clearTimeout(fallbackTimerRef.current);
+        fallbackTimerRef.current = null;
+      }
+    };
   }, []);
 
   return (
