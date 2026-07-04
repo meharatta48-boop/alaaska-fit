@@ -25,6 +25,7 @@ export default function Home() {
   const [sectionsOrder, setSectionsOrder] = useState([
     'hero', 'trust', 'products', 'process', 'factory', 'privatelabel', 'quote', 'blog', 'faq', 'contact'
   ]);
+  const [hiddenSections, setHiddenSections] = useState([]);
 
   useEffect(() => {
     apiFetch('/config/homepage')
@@ -33,6 +34,7 @@ export default function Home() {
           if (data.hero) setHeroConfig(data.hero);
           if (data.trustStats) setTrustStats(data.trustStats);
           if (data.sectionsOrder) setSectionsOrder(data.sectionsOrder);
+          if (data.hiddenSections) setHiddenSections(data.hiddenSections);
         }
       })
       .catch(() => {});
@@ -68,11 +70,13 @@ export default function Home() {
     }
   };
 
+  const visibleSections = sectionsOrder.filter(section => !hiddenSections.includes(section));
+
   return (
     <div className="landing-page min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow">
-        {sectionsOrder.map(section => renderSection(section))}
+        {visibleSections.map(section => renderSection(section))}
       </main>
       <Footer />
       <WhatsAppButton />

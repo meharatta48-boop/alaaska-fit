@@ -176,7 +176,18 @@ export const ConfigProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    const fallbackTimer = setTimeout(() => {
+      if (loading) {
+        setConfig(fallbackConfig);
+        applyThemeColors(fallbackConfig.settings);
+        applyDynamicHead(fallbackConfig.settings);
+        setLoading(false);
+      }
+    }, 6000);
+
     refreshConfig();
+
+    return () => clearTimeout(fallbackTimer);
   }, []);
 
   return (

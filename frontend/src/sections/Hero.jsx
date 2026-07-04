@@ -15,6 +15,7 @@ export default function Hero({ config }) {
   const leftRef = useRef(null);
   const rightRef = useRef(null);
 
+  const highlightItems = config?.highlights?.length ? config.highlights : BADGES;
   const videoUrl = config?.bgVideoUrl || 'https://assets.mixkit.co/videos/preview/mixkit-sewing-machine-stitching-a-fabric-41712-large.mp4';
   const fallbackImg = config?.bgFallbackImageUrl || 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1920&auto=format&fit=crop&q=80';
 
@@ -54,7 +55,7 @@ export default function Hero({ config }) {
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#EFF6FF] border border-[#BFDBFE] rounded-full">
               <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
               <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#1E3A8A]" style={{ fontFamily: 'Space Grotesk, monospace' }}>
-                Est. 2012 · Premium Textile Mill
+                {config?.eyebrow || 'Est. 2012 · Premium Textile Mill'}
               </span>
             </div>
 
@@ -72,6 +73,17 @@ export default function Hero({ config }) {
             </div>
 
             {/* CTAs */}
+            <div className="flex flex-wrap gap-2">
+              {highlightItems.map((item, i) => (
+                <div key={i} className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F5] bg-white/80 px-3 py-1.5 shadow-sm">
+                  <span className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color || '#D4AF37' }} />
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#4A6080]" style={{ fontFamily: 'Space Grotesk, monospace' }}>
+                    {item.text || item.label || item}
+                  </span>
+                </div>
+              ))}
+            </div>
+
             <div className="flex flex-wrap gap-3 items-center">
               <button
                 onClick={() => goTo('/quote')}

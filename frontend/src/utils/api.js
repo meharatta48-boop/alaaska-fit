@@ -22,10 +22,15 @@ export const apiFetch = async (endpoint, options = {}) => {
     headers['Authorization'] = `Bearer ${accessTokenMemory}`;
   }
 
+  const timeoutMs = options.timeoutMs || 8000;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
   const config = {
     ...options,
     headers,
     credentials: 'include',
+    signal: controller.signal,
   };
 
   try {
@@ -74,7 +79,12 @@ export const apiFetch = async (endpoint, options = {}) => {
     }
     return null;
   } catch (error) {
+    if (error.name === 'AbortError') {
+      throw new Error('Request timed out. Please try again.');
+    }
     console.error(`API Fetch Error [${endpoint}]:`, error);
     throw error;
+  } finally {
+    clearTimeout(timeoutId);
   }
 };

@@ -113,7 +113,7 @@ function DynamicHead() {
 function LandingPage() {
   const { config, loading } = useConfig();
 
-  if (loading || !config) {
+  if (loading && !config) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center flex-col gap-4 font-sans">
         {config?.settings?.loaderLogo ? (
@@ -126,7 +126,11 @@ function LandingPage() {
     );
   }
 
-  const homepage = config.homepage || {};
+  const currentConfig = config || {
+    homepage: { sectionsOrder: ['hero', 'trust', 'products', 'process', 'factory', 'privatelabel', 'quote', 'blog', 'contact'], hiddenSections: [] },
+    settings: {}
+  };
+  const homepage = currentConfig.homepage || {};
   const order = homepage.sectionsOrder || ['hero', 'trust', 'products', 'process', 'factory', 'privatelabel', 'testimonials', 'quote', 'blog', 'faq', 'contact'];
   const hidden = homepage.hiddenSections || [];
 

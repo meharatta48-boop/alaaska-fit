@@ -71,9 +71,12 @@ export default function Footer() {
   }, []);
 
   const logoUrl = config?.siteLogo || '';
+  const footerConfig = config?.footer || {};
+  const socialLinks = config?.socialLinks || {};
+  const companyName = config?.companyName || config?.siteName || 'Al Aaska Fit';
 
   return (
-    <footer className="bg-matte-black border-t border-matte-border pt-16 pb-8 text-white">
+    <footer className="bg-gradient-to-b from-[#0F1E45] via-[#0B1633] to-[#060D1F] border-t border-matte-border pt-16 pb-8 text-white">
       <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 font-sans mb-12">
 
         {/* Info Column */}
@@ -98,16 +101,16 @@ export default function Footer() {
             )}
           </div>
           <p className="text-xs text-matte-text leading-relaxed mb-6">
-            Enterprise-grade private-label apparel manufacturer. Sourcing, sewing, embroidery, and packaging luxury blanks for premium global labels and streetwear brands.
+            {footerConfig.aboutText || 'Enterprise-grade private-label apparel manufacturer. Sourcing, sewing, embroidery, and packaging luxury blanks for premium global labels and streetwear brands.'}
           </p>
           <div className="flex gap-4">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-matte-text hover:text-gold-400 transition-colors">
+            <a href={socialLinks.instagram || 'https://instagram.com'} target="_blank" rel="noopener noreferrer" className="text-matte-text hover:text-gold-400 transition-colors">
               <Instagram size={18} />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-matte-text hover:text-gold-400 transition-colors">
+            <a href={socialLinks.linkedin || 'https://linkedin.com'} target="_blank" rel="noopener noreferrer" className="text-matte-text hover:text-gold-400 transition-colors">
               <Linkedin size={18} />
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-matte-text hover:text-gold-400 transition-colors">
+            <a href={socialLinks.facebook || 'https://facebook.com'} target="_blank" rel="noopener noreferrer" className="text-matte-text hover:text-gold-400 transition-colors">
               <Facebook size={18} />
             </a>
           </div>
@@ -149,15 +152,15 @@ export default function Footer() {
           <ul className="space-y-4 text-xs text-matte-text">
             <li className="flex items-center gap-3 justify-start">
               <Mail size={16} className="text-gold-400 shrink-0" />
-              <span>production@alaaskafit.com</span>
+              <span>{config?.contactEmail || 'production@alaaskafit.com'}</span>
             </li>
             <li className="flex items-center gap-3 justify-start">
               <Phone size={16} className="text-gold-400 shrink-0" />
-              <span dir="ltr">+92 300 1234567</span>
+              <span dir="ltr">{config?.contactPhone || '+92 300 1234567'}</span>
             </li>
             <li className="flex items-start gap-3 justify-start">
               <MapPin size={16} className="text-gold-400 shrink-0 mt-0.5" />
-              <span>Industrial Zone Block A, Karachi, Pakistan</span>
+              <span>{config?.factoryAddress || 'Industrial Zone Block A, Karachi, Pakistan'}</span>
             </li>
           </ul>
         </div>
@@ -165,7 +168,7 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-8 border-t border-matte-border/50 flex flex-col md:flex-row justify-between items-center text-[10px] text-matte-text font-sans gap-4">
-        <span>&copy; {currentYear} {t('brandName')}. {t('footerRights')}</span>
+        <span>&copy; {currentYear} {companyName}. {footerConfig.copyrightText || t('footerRights')}</span>
         <div className="flex gap-6">
           <Link to="/privacy-policy" className="hover:text-gold-400 transition-colors">{t('footerPrivacy')}</Link>
           <Link to="/terms-conditions" className="hover:text-gold-400 transition-colors">{t('footerTerms')}</Link>

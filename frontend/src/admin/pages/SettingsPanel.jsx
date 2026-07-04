@@ -307,6 +307,29 @@ export default function SettingsPanel() {
           { title: 'Company', links: [{ label: 'About Us', path: '/about-us' }, { label: 'Our Story', path: '/our-story' }] }
         ]
       };
+      if (!data.homepage) data.homepage = {
+        hero: {
+          eyebrow: 'Est. 2012 · Premium Textile Mill',
+          title: 'Luxury Apparel',
+          subtitle: 'Manufacturing',
+          description: 'We engineer premium custom streetwear, heavyweight blanks, and high-density embroidery runs for global luxury labels — fully ISO & AQL compliant.',
+          primaryBtnText: 'Get Custom Quote',
+          secondaryBtnText: 'Explore Catalog',
+          highlights: [
+            { text: 'AQL 1.5 Certified', color: '#D4AF37' },
+            { text: '100% Solar Run', color: '#1E3A8A' },
+            { text: 'GOTS Organic', color: '#10B981' }
+          ]
+        },
+        trustStats: [
+          { value: '5M+', label: 'Pieces/Year' },
+          { value: '45+', label: 'Countries' },
+          { value: '100', label: 'Min. MOQ' },
+          { value: '12+', label: 'Yrs Exp.' }
+        ],
+        sectionsOrder: ['hero', 'trust', 'products', 'process', 'factory', 'privatelabel', 'quote', 'blog', 'faq', 'contact'],
+        hiddenSections: []
+      };
       if (!data.whatsappConfig) data.whatsappConfig = { welcomeMessage: 'Hello! Welcome to Al Aaska Fit.', autoMessage: 'Inquiry from website', showButton: true, position: 'right', buttonColor: '#25D366' };
       if (!data.mapConfig) data.mapConfig = { latitude: '24.8719409', longitude: '67.0142345', zoomLevel: 12, enableMap: true, addressLine: '' };
       if (!data.socialLinks) data.socialLinks = { instagram: '', facebook: '', linkedin: '', twitter: '', youtube: '' };
@@ -331,7 +354,30 @@ export default function SettingsPanel() {
         socialLinks: { instagram: '', facebook: '', linkedin: '', twitter: '', youtube: '' },
         seoDefaults: { metaTitle: 'Al Aaska Fit', metaDescription: 'Clothing manufacturer.', keywords: 'clothing factory' },
         maintenanceMode: { enabled: false, message: 'Down for maintenance.', allowAdmins: true },
-        smtpConfig: { host: '', port: '465', user: '', pass: '', from: '' }
+        smtpConfig: { host: '', port: '465', user: '', pass: '', from: '' },
+        homepage: {
+          hero: {
+            eyebrow: 'Est. 2012 · Premium Textile Mill',
+            title: 'Luxury Apparel',
+            subtitle: 'Manufacturing',
+            description: 'We engineer premium custom streetwear, heavyweight blanks, and high-density embroidery runs for global luxury labels — fully ISO & AQL compliant.',
+            primaryBtnText: 'Get Custom Quote',
+            secondaryBtnText: 'Explore Catalog',
+            highlights: [
+              { text: 'AQL 1.5 Certified', color: '#D4AF37' },
+              { text: '100% Solar Run', color: '#1E3A8A' },
+              { text: 'GOTS Organic', color: '#10B981' }
+            ]
+          },
+          trustStats: [
+            { value: '5M+', label: 'Pieces/Year' },
+            { value: '45+', label: 'Countries' },
+            { value: '100', label: 'Min. MOQ' },
+            { value: '12+', label: 'Yrs Exp.' }
+          ],
+          sectionsOrder: ['hero', 'trust', 'products', 'process', 'factory', 'privatelabel', 'quote', 'blog', 'faq', 'contact'],
+          hiddenSections: []
+        }
       });
     } finally { setLoading(false); }
   };
@@ -372,6 +418,7 @@ export default function SettingsPanel() {
     setMsg(null);
     try {
       await apiFetch('/config/settings', { method: 'PUT', body: JSON.stringify({ value: config }) });
+      await apiFetch('/config/homepage', { method: 'PUT', body: JSON.stringify({ value: config.homepage || {} }) });
       await refreshConfig();
       setMsg({ type: 'success', text: '✓ Enterprise configuration saved and live!' });
     } catch (e) {
@@ -409,6 +456,22 @@ export default function SettingsPanel() {
     setCustomRoles(p => [...p, { name: newRoleName, permissions: newRolePerms }]);
     setNewRoleName('');
     setNewRolePerms([]);
+  };
+
+  const moveSection = (index, direction) => {
+    const currentOrder = [...(config.homepage?.sectionsOrder || [])];
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= currentOrder.length) return;
+    [currentOrder[index], currentOrder[targetIndex]] = [currentOrder[targetIndex], currentOrder[index]];
+    set('homepage.sectionsOrder', currentOrder);
+  };
+
+  const toggleSectionVisibility = (section) => {
+    const hiddenSections = [...(config.homepage?.hiddenSections || [])];
+    const nextHidden = hiddenSections.includes(section)
+      ? hiddenSections.filter(item => item !== section)
+      : [...hiddenSections, section];
+    set('homepage.hiddenSections', nextHidden);
   };
   const removeRole = (index) => setCustomRoles(p => p.filter((_, i) => i !== index));
 
@@ -448,6 +511,7 @@ export default function SettingsPanel() {
 
   const TABS = [
     { id: 'branding', label: 'Branding', icon: Sliders },
+    { id: 'homepage', label: 'Homepage Builder', icon: Layout },
     { id: 'theme', label: 'Theme Designer', icon: Palette },
     { id: 'typography', label: 'Typography', icon: Type },
     { id: 'layout', label: 'Header & Navbar', icon: Menu },
@@ -618,6 +682,45 @@ export default function SettingsPanel() {
       )}
 
       {/* ═══════════════ THEME DESIGNER TAB ═══════════════ */}
+      {activeTab === 'homepage' && (
+        <div className="space-y-6">
+          <Section icon={Layout} title="Hero & Homepage Builder">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Field label="Hero Eyebrow" value={config.homepage?.hero?.eyebrow} onChange={v => set('homepage.hero.eyebrow', v)} />
+              <Field label="Hero Title" value={config.homepage?.hero?.title} onChange={v => set('homepage.hero.title', v)} />
+              <Field label="Hero Subtitle" value={config.homepage?.hero?.subtitle} onChange={v => set('homepage.hero.subtitle', v)} />
+              <Field label="Primary CTA" value={config.homepage?.hero?.primaryBtnText} onChange={v => set('homepage.hero.primaryBtnText', v)} />
+              <Field label="Secondary CTA" value={config.homepage?.hero?.secondaryBtnText} onChange={v => set('homepage.hero.secondaryBtnText', v)} />
+              <Field wide label="Hero Description" rows={3} value={config.homepage?.hero?.description} onChange={v => set('homepage.hero.description', v)} />
+            </div>
+          </Section>
+
+          <Section icon={Eye} title="Section Visibility & Order">
+            <div className="space-y-3">
+              {(config.homepage?.sectionsOrder || []).map((section, index) => {
+                const sectionLabel = section.replace(/(^\w|[-_]\w)/g, m => m.replace(/[-_]/, '').toUpperCase());
+                const isHidden = (config.homepage?.hiddenSections || []).includes(section);
+                return (
+                  <div key={section} className={`flex flex-col gap-3 rounded-xl border px-3 py-3 sm:flex-row sm:items-center sm:justify-between ${isHidden ? 'border-[#2A2A2A] bg-[#080808]' : 'border-[#1E1E1E] bg-[#0A0A0A]'}`}>
+                    <div>
+                      <p className="text-[10px] font-mono uppercase tracking-wider text-white">{sectionLabel}</p>
+                      <p className="text-[9px] font-mono text-[#6B7280]">{isHidden ? 'Currently hidden from the live homepage' : 'Visible on the live homepage'}</p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button onClick={() => moveSection(index, -1)} className="rounded-lg border border-[#222] px-2 py-1 text-[9px] font-mono text-[#9CA3AF] hover:text-white hover:border-[#D4AF37] transition-colors cursor-pointer">↑</button>
+                      <button onClick={() => moveSection(index, 1)} className="rounded-lg border border-[#222] px-2 py-1 text-[9px] font-mono text-[#9CA3AF] hover:text-white hover:border-[#D4AF37] transition-colors cursor-pointer">↓</button>
+                      <button onClick={() => toggleSectionVisibility(section)} className={`rounded-lg px-2.5 py-1.5 text-[9px] font-mono uppercase tracking-wider transition-colors cursor-pointer ${isHidden ? 'bg-[#D4AF37] text-black' : 'border border-[#222] text-[#9CA3AF] hover:text-white hover:border-[#D4AF37]'}`}>
+                        {isHidden ? 'Show' : 'Hide'}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </Section>
+        </div>
+      )}
+
       {activeTab === 'theme' && (
         <div className="space-y-6">
           <Section icon={Palette} title="Theme Presets">
