@@ -76,31 +76,29 @@ export default function Footer() {
   const companyName = config?.companyName || config?.siteName || 'Al Aaska Fit';
 
   return (
-    <footer className="bg-gradient-to-b from-[#0F1E45] via-[#0B1633] to-[#060D1F] border-t border-matte-border pt-16 pb-8 text-white">
+    <footer className="bg-gradient-to-br from-[#60A5FA] via-[#3B82F6] to-[#1D4ED8] pt-16 pb-8 text-white">
       <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 font-sans mb-12">
 
         {/* Info Column */}
         <div className={isRTL ? 'text-right' : 'text-left'}>
-          <div className="mb-4">
+          <div className="mb-4 flex items-center gap-3">
             {logoUrl ? (
-              <img src={logoUrl} alt="Al Aaska Fit Logo" className="h-10 object-contain" />
+              <img src={logoUrl} alt="Al Aaska Fit Logo" className="h-10 object-contain rounded-md bg-white/10 p-1" />
             ) : (
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1E3A8A] to-[#D4AF37] flex items-center justify-center text-white font-bold text-sm shadow-md">
-                  AF
-                </div>
-                <div className="flex flex-col leading-none">
-                  <span className="text-sm md:text-base font-extrabold tracking-[0.15em] text-white">
-                    <span className="text-gold-400">AL</span>AASKAFIT
-                  </span>
-                  <span className="text-[7px] font-mono tracking-[0.35em] uppercase text-white/40 font-light">
-                    Textile Factory
-                  </span>
-                </div>
+              <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-white font-bold text-sm shadow-md">
+                AF
               </div>
             )}
+            <div className="flex flex-col leading-none">
+              <span className="text-base md:text-lg font-extrabold tracking-[0.15em] text-white uppercase">
+                {companyName}
+              </span>
+              <span className="text-[8px] font-mono tracking-[0.35em] uppercase text-white/80 font-light">
+                {config?.siteTagline || 'Textile Factory'}
+              </span>
+            </div>
           </div>
-          <p className="text-xs text-matte-text leading-relaxed mb-6">
+          <p className="text-xs text-white/80 leading-relaxed mb-6">
             {footerConfig.aboutText || 'Enterprise-grade private-label apparel manufacturer. Sourcing, sewing, embroidery, and packaging luxury blanks for premium global labels and streetwear brands.'}
           </p>
           <div className="flex gap-4">
@@ -167,12 +165,15 @@ export default function Footer() {
 
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-8 border-t border-matte-border/50 flex flex-col md:flex-row justify-between items-center text-[10px] text-matte-text font-sans gap-4">
-        <span>&copy; {currentYear} {companyName}. {footerConfig.copyrightText || t('footerRights')}</span>
+      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-8 border-t border-white/20 flex flex-col md:flex-row justify-between items-center text-[10px] text-white/80 font-sans gap-4">
+        <div className="flex items-center gap-4">
+          <span>&copy; {currentYear} {companyName}. {footerConfig.copyrightText || 'All rights reserved.'}</span>
+        </div>
+        <span className="hidden md:inline">Website developed by Mehar Atta</span>
         <div className="flex gap-6">
-          <Link to="/privacy-policy" className="hover:text-gold-400 transition-colors">{t('footerPrivacy')}</Link>
-          <Link to="/terms-conditions" className="hover:text-gold-400 transition-colors">{t('footerTerms')}</Link>
-          <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-gold-400 transition-colors">{t('footerSitemap')}</a>
+          <Link to="/privacy-policy" className="hover:text-white transition-colors">{t('footerPrivacy')}</Link>
+          <Link to="/terms-conditions" className="hover:text-white transition-colors">{t('footerTerms')}</Link>
+          <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">{t('footerSitemap')}</a>
         </div>
       </div>
     </footer>

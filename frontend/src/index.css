@@ -189,10 +189,19 @@ body {
 /* ─── Section Divider ─── */
 .section-divider { height: 1px; background: linear-gradient(to right, transparent, #E2E8F5, transparent); }
 
-/* ─── Hero always uses text-white (dark overlay on video) ─── */
-#hero { color: white !important; }
-#hero [class*="text-white"] { color: white !important; }
-#hero h1, #hero h2, #hero h3, #hero p { color: white !important; }
+/* ─── Hero: only force white for dark-overlay variant (use .hero-dark) ─── */
+#hero.hero-dark,
+#hero .hero-dark {
+  color: white !important;
+}
+#hero.hero-dark [class*="text-white"],
+#hero .hero-dark [class*="text-white"] {
+  color: white !important;
+}
+#hero.hero-dark h1, #hero.hero-dark h2, #hero.hero-dark h3, #hero.hero-dark p,
+#hero .hero-dark h1, #hero .hero-dark h2, #hero .hero-dark h3, #hero .hero-dark p {
+  color: white !important;
+}
 
 /* ─── Glassmorphism (LIGHT) ─── */
 .glass-panel {
