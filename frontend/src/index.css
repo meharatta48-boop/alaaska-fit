@@ -403,25 +403,28 @@ select.input-style { cursor: pointer; }
   border-color: #E2E8F5 !important;
 }
 
-/* ── Fix all white text in public sections ─────────────────────────────── */
+/* ── Fix white-text handling across the public site ─────────────────── */
 .landing-page .text-white,
 .landing-page [class*="text-white"] {
-  color: var(--text-primary) !important;
+  color: var(--accent) !important;
 }
-/* Exception: text inside genuinely dark-bg elements stays white */
-.landing-page [style*="background-color: #"] .text-white,
+/* Keep white text on true dark/navy backgrounds */
 .landing-page [class*="bg-[#1E3A8A]"] .text-white,
 .landing-page [class*="bg-[#0F1E45]"] .text-white,
+.landing-page [class*="bg-[#071225]"] .text-white,
 .landing-page [class*="bg-navy"] .text-white,
 .landing-page [class*="bg-gold"] .text-white,
 .landing-page .bg-gold-400 .text-white,
 .landing-page .bg-gold-400 [class*="text-white"],
-.landing-page [class*="bg-[#D4AF37]"] .text-white {
-  color: #000000 !important;
+.landing-page [class*="bg-[#D4AF37]"] .text-white,
+.landing-page [style*="background-color: #"] .text-white {
+  color: #FFFFFF !important;
 }
-/* Buttons with dark/navy backgrounds keep white text */
+/* Buttons on dark/navy backgrounds keep white text */
 .landing-page button[class*="bg-[#1E3A8A]"],
 .landing-page a[class*="bg-[#1E3A8A]"],
+.landing-page button[class*="bg-[#0F1E45]"],
+.landing-page a[class*="bg-[#0F1E45]"],
 .landing-page button[class*="bg-navy"],
 .landing-page button.bg-gold-400,
 .landing-page a.bg-gold-400 {
