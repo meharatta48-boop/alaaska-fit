@@ -98,6 +98,70 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ─── Auto contrast based on background color ─── */
+.bg-white,
+.bg-[#FFFFFF],
+.bg-[#F8FAFF],
+.bg-[#F0F4FC],
+.bg-matte-black,
+.bg-matte-gray,
+[class*="bg-[#F8FAFF]"],
+[class*="bg-[#F0F4FC]"],
+[class*="bg-matte-black"],
+[class*="bg-matte-gray"],
+[class*="bg-[#FFFFFF]"] {
+  color: var(--accent) !important;
+}
+
+.bg-[#1E3A8A],
+.bg-[#0F1E45],
+.bg-[#071225],
+.bg-navy,
+.bg-navy-900,
+[class*="bg-[#1E3A8A]"],
+[class*="bg-[#0F1E45]"],
+[class*="bg-[#071225]"],
+[class*="bg-navy"],
+[class*="bg-navy-900"] {
+  color: #FFFFFF !important;
+}
+
+.bg-gold-400,
+.bg-gold,
+[class*="bg-gold-400"],
+[class*="bg-[#D4AF37]"],
+[class*="bg-gold"] {
+  color: #000000 !important;
+}
+
+/* Ensure dark section text overrides any light text utility classes */
+.bg-[#1E3A8A] .text-white,
+.bg-[#0F1E45] .text-white,
+.bg-[#071225] .text-white,
+.bg-navy .text-white,
+.bg-navy-900 .text-white,
+[class*="bg-[#1E3A8A]"] .text-white,
+[class*="bg-[#0F1E45]"] .text-white,
+[class*="bg-[#071225]"] .text-white,
+[class*="bg-navy"] .text-white,
+[class*="bg-navy-900"] .text-white {
+  color: #FFFFFF !important;
+}
+
+/* Ensure light section text overrides any accidental white text utility classes */
+.bg-white .text-white,
+.bg-[#F8FAFF] .text-white,
+.bg-[#F0F4FC] .text-white,
+.bg-matte-black .text-white,
+.bg-matte-gray .text-white,
+[class*="bg-[#F8FAFF]"] .text-white,
+[class*="bg-[#F0F4FC]"] .text-white,
+[class*="bg-matte-black"] .text-white,
+[class*="bg-matte-gray"] .text-white,
+[class*="bg-[#FFFFFF]"] .text-white {
+  color: var(--accent) !important;
+}
+
 /* ─── Custom Scrollbar ─── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: #F0F4FC; }
