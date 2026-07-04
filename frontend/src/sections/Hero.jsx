@@ -16,8 +16,37 @@ export default function Hero({ config }) {
   const rightRef = useRef(null);
 
   const highlightItems = config?.highlights?.length ? config.highlights : BADGES;
+  const preset = config?.preset || 'signature';
+  const animation = config?.animation || 'slide';
+  const showStats = config?.showStats !== false;
+  const showTrustRow = config?.showTrustRow !== false;
   const videoUrl = config?.bgVideoUrl || 'https://assets.mixkit.co/videos/preview/mixkit-sewing-machine-stitching-a-fabric-41712-large.mp4';
   const fallbackImg = config?.bgFallbackImageUrl || 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1920&auto=format&fit=crop&q=80';
+
+  const motionVariants = {
+    slide: { initial: { opacity: 0, x: -40 }, animate: { opacity: 1, x: 0 }, transition: { duration: 0.9, ease: [0.25, 0.8, 0.25, 1] } },
+    fade: { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, ease: [0.25, 0.8, 0.25, 1] } },
+    zoom: { initial: { opacity: 0, scale: 0.95 }, animate: { opacity: 1, scale: 1 }, transition: { duration: 0.85, ease: [0.25, 0.8, 0.25, 1] } },
+  };
+  const motionProps = motionVariants[animation] || motionVariants.slide;
+
+  const visualClass = preset === 'editorial'
+    ? 'bg-[#0F1E45] text-white'
+    : preset === 'immersive'
+      ? 'bg-[#071225] text-white'
+      : 'bg-white';
+
+  const primaryButtonClass = preset === 'editorial'
+    ? 'bg-[#D4AF37] text-[#0F1E45] hover:bg-[#c79e26]'
+    : preset === 'immersive'
+      ? 'bg-white text-[#0F1E45] hover:bg-[#F8FAFF]'
+      : 'bg-[#1E3A8A] hover:bg-[#162A5E] text-white';
+
+  const secondaryButtonClass = preset === 'editorial'
+    ? 'border-[#D4AF37]/40 text-[#D4AF37] hover:bg-[#D4AF37]/10'
+    : preset === 'immersive'
+      ? 'border-white/30 text-white hover:bg-white/10'
+      : 'border-[#E2E8F5] text-[#1E3A8A] hover:bg-[#EFF6FF]';
 
   const goTo = (path) => {
     navigate(path);
@@ -28,7 +57,7 @@ export default function Hero({ config }) {
     <>
       <section
         id="hero"
-        className="relative min-h-screen pt-20 flex items-center bg-white overflow-hidden"
+        className={`relative min-h-screen pt-20 flex items-center overflow-hidden ${visualClass}`}
       >
         {/* Subtle background decoration */}
         <div className="absolute inset-0 pointer-events-none">
@@ -46,28 +75,28 @@ export default function Hero({ config }) {
           {/* Left: Content */}
           <motion.div
             ref={leftRef}
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.9, ease: [0.25, 0.8, 0.25, 1] }}
+            initial={motionProps.initial}
+            animate={motionProps.animate}
+            transition={motionProps.transition}
             className="lg:col-span-6 xl:col-span-5 space-y-8"
           >
             {/* Eyebrow badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#EFF6FF] border border-[#BFDBFE] rounded-full">
               <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#1E3A8A]" style={{ fontFamily: 'Space Grotesk, monospace' }}>
+              <span className={`text-[10px] font-bold uppercase tracking-[0.22em] ${preset === 'editorial' || preset === 'immersive' ? 'text-[#D4AF37]' : 'text-[#1E3A8A]'}`} style={{ fontFamily: 'Space Grotesk, monospace' }}>
                 {config?.eyebrow || 'Est. 2012 · Premium Textile Mill'}
               </span>
             </div>
 
             {/* Headline */}
             <div>
-              <h1 className="font-display font-extrabold text-[2.75rem] sm:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight leading-[1.04] text-[#0F1E45] uppercase">
+              <h1 className={`font-display font-extrabold text-[2.75rem] sm:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight leading-[1.04] uppercase ${preset === 'editorial' || preset === 'immersive' ? 'text-white' : 'text-[#0F1E45]'}`}>
                 {config?.title || 'Luxury Apparel'}<br />
                 <span className="bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#D4AF37] bg-clip-text text-transparent">
                   {config?.subtitle || 'Manufacturing'}
                 </span>
               </h1>
-              <p className="mt-5 text-[0.95rem] leading-[1.8] text-[#4A6080] max-w-[480px]">
+              <p className={`mt-5 text-[0.95rem] leading-[1.8] max-w-[480px] ${preset === 'editorial' || preset === 'immersive' ? 'text-white/80' : 'text-[#4A6080]'}`}>
                 {config?.description || 'We engineer premium custom streetwear, heavyweight blanks, and high-density embroidery runs for global luxury labels — fully ISO & AQL compliant.'}
               </p>
             </div>
@@ -75,9 +104,9 @@ export default function Hero({ config }) {
             {/* CTAs */}
             <div className="flex flex-wrap gap-2">
               {highlightItems.map((item, i) => (
-                <div key={i} className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F5] bg-white/80 px-3 py-1.5 shadow-sm">
+                <div key={i} className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm ${preset === 'editorial' || preset === 'immersive' ? 'border-white/20 bg-white/10 text-white' : 'border-[#E2E8F5] bg-white/80'}`}>
                   <span className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color || '#D4AF37' }} />
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#4A6080]" style={{ fontFamily: 'Space Grotesk, monospace' }}>
+                  <span className={`text-[10px] font-semibold uppercase tracking-[0.18em] ${preset === 'editorial' || preset === 'immersive' ? 'text-white/90' : 'text-[#4A6080]'}`} style={{ fontFamily: 'Space Grotesk, monospace' }}>
                     {item.text || item.label || item}
                   </span>
                 </div>
@@ -87,7 +116,7 @@ export default function Hero({ config }) {
             <div className="flex flex-wrap gap-3 items-center">
               <button
                 onClick={() => goTo('/quote')}
-                className="group inline-flex items-center gap-2 px-7 py-3.5 bg-[#1E3A8A] hover:bg-[#162A5E] text-white text-[11px] font-bold uppercase tracking-wider rounded-xl shadow-[0_4px_20px_rgba(30,58,138,0.30)] hover:shadow-[0_8px_28px_rgba(30,58,138,0.40)] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+                className={`group inline-flex items-center gap-2 px-7 py-3.5 text-[11px] font-bold uppercase tracking-wider rounded-xl shadow-[0_4px_20px_rgba(30,58,138,0.30)] hover:shadow-[0_8px_28px_rgba(30,58,138,0.40)] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer ${primaryButtonClass}`}
               >
                 {config?.primaryBtnText || 'Get Custom Quote'}
                 <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
@@ -95,24 +124,24 @@ export default function Hero({ config }) {
 
               <button
                 onClick={() => goTo('/products')}
-                className="inline-flex items-center gap-2 px-7 py-3.5 border-[1.5px] border-[#E2E8F5] hover:border-[#1E3A8A] text-[#1E3A8A] text-[11px] font-bold uppercase tracking-wider rounded-xl hover:bg-[#EFF6FF] transition-all duration-200 cursor-pointer"
+                className={`inline-flex items-center gap-2 px-7 py-3.5 border-[1.5px] text-[11px] font-bold uppercase tracking-wider rounded-xl transition-all duration-200 cursor-pointer ${secondaryButtonClass}`}
               >
                 {config?.secondaryBtnText || 'Explore Catalog'}
               </button>
 
               <button
                 onClick={() => setShowReel(true)}
-                className="group inline-flex items-center gap-2.5 text-[#8A9BB8] hover:text-[#1E3A8A] text-[11px] font-semibold uppercase tracking-wider transition-colors cursor-pointer"
+                className={`group inline-flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-wider transition-colors cursor-pointer ${preset === 'editorial' || preset === 'immersive' ? 'text-white/80 hover:text-white' : 'text-[#8A9BB8] hover:text-[#1E3A8A]'}`}
               >
-                <span className="w-9 h-9 rounded-full border border-[#E2E8F5] group-hover:border-[#1E3A8A] group-hover:bg-[#EFF6FF] flex items-center justify-center transition-all">
-                  <Play size={12} className="fill-[#1E3A8A] stroke-none ml-0.5" />
+                <span className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all ${preset === 'editorial' || preset === 'immersive' ? 'border-white/20 group-hover:border-white/40 group-hover:bg-white/10' : 'border-[#E2E8F5] group-hover:border-[#1E3A8A] group-hover:bg-[#EFF6FF]'}`}>
+                  <Play size={12} className={`${preset === 'editorial' || preset === 'immersive' ? 'fill-white' : 'fill-[#1E3A8A]'} stroke-none ml-0.5`} />
                 </span>
                 Watch Reel
               </button>
             </div>
 
             {/* Stats */}
-            <div className="pt-6 border-t border-[#E2E8F5] grid grid-cols-4 gap-4">
+            {showStats && <div className={`pt-6 border-t ${preset === 'editorial' || preset === 'immersive' ? 'border-white/15' : 'border-[#E2E8F5]'} grid grid-cols-4 gap-4`}>
               {[
                 { val: '5M+', label: 'Pieces/Year' },
                 { val: '45+', label: 'Countries' },
@@ -126,14 +155,14 @@ export default function Hero({ config }) {
                   transition={{ delay: 0.6 + i * 0.1 }}
                   className="space-y-0.5"
                 >
-                  <div className="font-display font-extrabold text-lg text-[#0F1E45]">{s.val}</div>
-                  <div className="text-[9px] font-medium uppercase tracking-widest text-[#8A9BB8]" style={{ fontFamily: 'Space Grotesk, monospace' }}>{s.label}</div>
+                  <div className={`font-display font-extrabold text-lg ${preset === 'editorial' || preset === 'immersive' ? 'text-white' : 'text-[#0F1E45]'}`}>{s.val}</div>
+                  <div className={`text-[9px] font-medium uppercase tracking-widest ${preset === 'editorial' || preset === 'immersive' ? 'text-white/70' : 'text-[#8A9BB8]'}`} style={{ fontFamily: 'Space Grotesk, monospace' }}>{s.label}</div>
                 </motion.div>
               ))}
-            </div>
+            </div>}
 
             {/* Trust row */}
-            <div className="flex items-center gap-4">
+            {showTrustRow && <div className="flex items-center gap-4">
               <div className="flex -space-x-2">
                 {['https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&auto=format&fit=crop',
                   'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&auto=format&fit=crop',
@@ -145,9 +174,9 @@ export default function Hero({ config }) {
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => <Star key={i} size={10} className="fill-[#D4AF37] text-[#D4AF37]" />)}
                 </div>
-                <p className="text-[10px] text-[#8A9BB8] mt-0.5">Trusted by 250+ global brands</p>
+                <p className={`text-[10px] mt-0.5 ${preset === 'editorial' || preset === 'immersive' ? 'text-white/70' : 'text-[#8A9BB8]'}`}>Trusted by 250+ global brands</p>
               </div>
-            </div>
+            </div>}
           </motion.div>
 
           {/* Right: Video Frame */}

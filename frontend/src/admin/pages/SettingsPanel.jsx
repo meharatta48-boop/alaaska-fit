@@ -98,6 +98,18 @@ const ALL_PERMISSIONS = [
   { id: 'reports:export', label: 'Export Reports' },
 ];
 
+const HOMEPAGE_PRESETS = [
+  { id: 'signature', label: 'Signature Split', description: 'Balanced editorial hero with polished split layout.' },
+  { id: 'editorial', label: 'Editorial Focus', description: 'High-contrast narrative hero for premium storytelling.' },
+  { id: 'immersive', label: 'Immersive Showcase', description: 'Bold cinematic hero with a stronger visual centerpiece.' },
+];
+
+const ANIMATION_OPTIONS = [
+  { id: 'slide', label: 'Slide In' },
+  { id: 'fade', label: 'Fade Up' },
+  { id: 'zoom', label: 'Zoom Reveal' },
+];
+
 function applyCSSVar(varName, value) {
   document.documentElement.style.setProperty(varName, value);
 }
@@ -315,6 +327,10 @@ export default function SettingsPanel() {
           description: 'We engineer premium custom streetwear, heavyweight blanks, and high-density embroidery runs for global luxury labels — fully ISO & AQL compliant.',
           primaryBtnText: 'Get Custom Quote',
           secondaryBtnText: 'Explore Catalog',
+          preset: 'signature',
+          animation: 'slide',
+          showStats: true,
+          showTrustRow: true,
           highlights: [
             { text: 'AQL 1.5 Certified', color: '#D4AF37' },
             { text: '100% Solar Run', color: '#1E3A8A' },
@@ -363,6 +379,10 @@ export default function SettingsPanel() {
             description: 'We engineer premium custom streetwear, heavyweight blanks, and high-density embroidery runs for global luxury labels — fully ISO & AQL compliant.',
             primaryBtnText: 'Get Custom Quote',
             secondaryBtnText: 'Explore Catalog',
+            preset: 'signature',
+            animation: 'slide',
+            showStats: true,
+            showTrustRow: true,
             highlights: [
               { text: 'AQL 1.5 Certified', color: '#D4AF37' },
               { text: '100% Solar Run', color: '#1E3A8A' },
@@ -692,6 +712,43 @@ export default function SettingsPanel() {
               <Field label="Primary CTA" value={config.homepage?.hero?.primaryBtnText} onChange={v => set('homepage.hero.primaryBtnText', v)} />
               <Field label="Secondary CTA" value={config.homepage?.hero?.secondaryBtnText} onChange={v => set('homepage.hero.secondaryBtnText', v)} />
               <Field wide label="Hero Description" rows={3} value={config.homepage?.hero?.description} onChange={v => set('homepage.hero.description', v)} />
+            </div>
+
+            <div className="space-y-3">
+              <p className="text-[10px] font-mono uppercase tracking-wider text-[#9CA3AF]">Hero Presets</p>
+              <div className="grid gap-3 md:grid-cols-3">
+                {HOMEPAGE_PRESETS.map(preset => (
+                  <button
+                    key={preset.id}
+                    onClick={() => set('homepage.hero.preset', preset.id)}
+                    className={`rounded-2xl border p-3 text-left transition-all cursor-pointer ${config.homepage?.hero?.preset === preset.id ? 'border-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#1E1E1E] bg-[#080808] hover:border-[#D4AF37]/40'}`}
+                  >
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-white">{preset.label}</p>
+                    <p className="mt-1 text-[9px] leading-relaxed text-[#6B7280]">{preset.description}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-[1.2fr_0.8fr]">
+              <div className="space-y-3">
+                <p className="text-[10px] font-mono uppercase tracking-wider text-[#9CA3AF]">Animation Style</p>
+                <div className="flex flex-wrap gap-2">
+                  {ANIMATION_OPTIONS.map(option => (
+                    <button
+                      key={option.id}
+                      onClick={() => set('homepage.hero.animation', option.id)}
+                      className={`rounded-full border px-3 py-1.5 text-[9px] font-mono uppercase tracking-wider transition-colors cursor-pointer ${config.homepage?.hero?.animation === option.id ? 'border-[#D4AF37] bg-[#D4AF37]/10 text-[#D4AF37]' : 'border-[#222] text-[#9CA3AF] hover:text-white hover:border-[#D4AF37]/40'}`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-3">
+                <Toggle value={config.homepage?.hero?.showStats !== false} onChange={v => set('homepage.hero.showStats', v)} label="Show stats strip" />
+                <Toggle value={config.homepage?.hero?.showTrustRow !== false} onChange={v => set('homepage.hero.showTrustRow', v)} label="Show trust row" />
+              </div>
             </div>
           </Section>
 
