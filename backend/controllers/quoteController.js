@@ -2,8 +2,8 @@ import { Quote, ActivityLog } from '../models/index.js';
 import { z } from 'zod';
 
 const quoteValidationSchema = z.object({
-  productType: z.string(),
-  quantity: z.number().min(1),
+  productType: z.string().trim().min(2),
+  quantity: z.coerce.number().int().min(1),
   fabric: z.string().optional(),
   gsm: z.string().optional(),
   colors: z.array(z.string()).optional(),

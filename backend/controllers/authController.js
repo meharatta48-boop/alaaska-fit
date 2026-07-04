@@ -30,6 +30,23 @@ const generateRefreshToken = (id) => {
   );
 };
 
+const getCookieOptions = (maxAge) => ({
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  maxAge
+});
+
+const setAuthCookies = (res, accessToken, refreshToken) => {
+  res.cookie('accessToken', accessToken, getCookieOptions(15 * 60 * 1000));
+  res.cookie('refreshToken', refreshToken, getCookieOptions(7 * 24 * 60 * 60 * 1000));
+};
+
+const clearAuthCookies = (res) => {
+  res.clearCookie('accessToken', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' });
+  res.clearCookie('refreshToken', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' });
+};
+
 export const register = async (req, res, next) => {
   try {
     const validated = signupSchema.parse(req.body);
@@ -58,13 +75,7 @@ export const register = async (req, res, next) => {
     const accessToken = generateAccessToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
 
-    // Set Refresh Token in Cookie
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-    });
+    setAuthCookies(res, accessToken, refreshToken);
 
     res.status(201).json({
       _id: user._id,
@@ -100,13 +111,7 @@ export const login = async (req, res, next) => {
     const accessToken = generateAccessToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
 
-    // Set Refresh Token in Cookie
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-    });
+    setAuthCookies(res, accessToken, refreshToken);
 
     res.json({
       _id: user._id,
@@ -136,6 +141,7 @@ export const refreshToken = async (req, res, next) => {
     }
 
     const newAccessToken = generateAccessToken(user._id);
+    setAuthCookies(res, newAccessToken, token);
     res.json({ accessToken: newAccessToken });
   } catch (error) {
     res.status(401).json({ message: 'Invalid refresh token' });
@@ -143,7 +149,7 @@ export const refreshToken = async (req, res, next) => {
 };
 
 export const logout = async (req, res) => {
-  res.clearCookie('refreshToken');
+  clearAuthCookies(res);
   res.json({ message: 'Logged out successfully' });
 };
 

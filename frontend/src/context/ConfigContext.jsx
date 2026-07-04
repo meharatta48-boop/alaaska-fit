@@ -3,23 +3,82 @@ import { apiFetch } from '../utils/api.js';
 
 const ConfigContext = createContext();
 
+const fallbackConfig = {
+  homepage: {
+    sectionsOrder: ['hero', 'trust', 'products', 'process', 'factory', 'privatelabel', 'quote', 'blog', 'contact'],
+    hiddenSections: []
+  },
+  settings: {
+    siteName: 'Al Aaska Fit',
+    logoText: 'AL AASKA FIT',
+    siteTagline: 'Textile Factory',
+    seoDefaults: {},
+    branding: {},
+    colorTheme: {},
+    typography: {},
+    header: {},
+    footer: {},
+    socialLinks: {},
+    mapConfig: {},
+    whatsappConfig: {},
+    maintenanceMode: {}
+  }
+};
+
 export const ConfigProvider = ({ children }) => {
-  const [config, setConfig] = useState(null);
+  const [config, setConfig] = useState(fallbackConfig);
   const [loading, setLoading] = useState(true);
 
   const refreshConfig = async () => {
     try {
       const data = await apiFetch('/config');
-      if (data) {
-        setConfig(data);
-        applyThemeColors(data.settings);
-        applyDynamicHead(data.settings);
-      }
+      const nextConfig = normalizeConfigPayload(data);
+      setConfig(nextConfig);
+      applyThemeColors(nextConfig.settings);
+      applyDynamicHead(nextConfig.settings);
     } catch (err) {
       console.error('Error fetching global configurations:', err);
+      setConfig(fallbackConfig);
+      applyThemeColors(fallbackConfig.settings);
+      applyDynamicHead(fallbackConfig.settings);
     } finally {
       setLoading(false);
     }
+  };
+
+  const normalizeConfigPayload = (data) => {
+    if (data && typeof data === 'object' && !Array.isArray(data)) {
+      const maybeConfig = data;
+      if (maybeConfig.homepage || maybeConfig.settings) {
+        return {
+          homepage: maybeConfig.homepage || fallbackConfig.homepage,
+          settings: maybeConfig.settings || fallbackConfig.settings,
+          aboutpage: maybeConfig.aboutpage,
+          processpage: maybeConfig.processpage,
+          servicespage: maybeConfig.servicespage,
+          qualitypage: maybeConfig.qualitypage,
+          sustainabilitypage: maybeConfig.sustainabilitypage,
+          careerspage: maybeConfig.careerspage,
+          gallerypage: maybeConfig.gallerypage,
+        };
+      }
+
+      const homepage = data.homepage || fallbackConfig.homepage;
+      const settings = data.settings || fallbackConfig.settings;
+      return {
+        homepage,
+        settings,
+        aboutpage: data.aboutpage,
+        processpage: data.processpage,
+        servicespage: data.servicespage,
+        qualitypage: data.qualitypage,
+        sustainabilitypage: data.sustainabilitypage,
+        careerspage: data.careerspage,
+        gallerypage: data.gallerypage,
+      };
+    }
+
+    return fallbackConfig;
   };
 
   const applyDynamicHead = (settings) => {

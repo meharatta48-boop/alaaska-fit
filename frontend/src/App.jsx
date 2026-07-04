@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 // Context Providers
@@ -27,44 +27,44 @@ import FAQSection from './sections/FAQ.jsx';
 import ContactSection from './sections/Contact.jsx';
 
 // Standalone Public Pages
-import AboutUs from './pages/AboutUs.jsx';
-import OurStory from './pages/OurStory.jsx';
-import Process from './pages/Process.jsx';
-import Services from './pages/Services.jsx';
-import CustomManufacturing from './pages/CustomManufacturing.jsx';
-import PrivateLabel from './pages/PrivateLabel.jsx';
-import QualityControl from './pages/QualityControl.jsx';
-import Certifications from './pages/Certifications.jsx';
-import FactoryGallery from './pages/FactoryGallery.jsx';
-import Blog from './pages/Blog.jsx';
-import BlogDetail from './pages/BlogDetail.jsx';
-import ProductsPage from './pages/Products.jsx';
-import ProductDetail from './pages/ProductDetail.jsx';
-import FAQs from './pages/FAQs.jsx';
-import TestimonialsPage from './pages/Testimonials.jsx';
-import Careers from './pages/Careers.jsx';
-import ContactUs from './pages/ContactUs.jsx';
-import RequestQuote from './pages/RequestQuote.jsx';
-import Sustainability from './pages/Sustainability.jsx';
-import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
-import TermsConditions from './pages/TermsConditions.jsx';
+const AboutUs = lazy(() => import('./pages/AboutUs.jsx'));
+const OurStory = lazy(() => import('./pages/OurStory.jsx'));
+const Process = lazy(() => import('./pages/Process.jsx'));
+const Services = lazy(() => import('./pages/Services.jsx'));
+const CustomManufacturing = lazy(() => import('./pages/CustomManufacturing.jsx'));
+const PrivateLabel = lazy(() => import('./pages/PrivateLabel.jsx'));
+const QualityControl = lazy(() => import('./pages/QualityControl.jsx'));
+const Certifications = lazy(() => import('./pages/Certifications.jsx'));
+const FactoryGallery = lazy(() => import('./pages/FactoryGallery.jsx'));
+const Blog = lazy(() => import('./pages/Blog.jsx'));
+const BlogDetail = lazy(() => import('./pages/BlogDetail.jsx'));
+const ProductsPage = lazy(() => import('./pages/Products.jsx'));
+const ProductDetail = lazy(() => import('./pages/ProductDetail.jsx'));
+const FAQs = lazy(() => import('./pages/FAQs.jsx'));
+const TestimonialsPage = lazy(() => import('./pages/Testimonials.jsx'));
+const Careers = lazy(() => import('./pages/Careers.jsx'));
+const ContactUs = lazy(() => import('./pages/ContactUs.jsx'));
+const RequestQuote = lazy(() => import('./pages/RequestQuote.jsx'));
+const Sustainability = lazy(() => import('./pages/Sustainability.jsx'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.jsx'));
+const TermsConditions = lazy(() => import('./pages/TermsConditions.jsx'));
 
 // Admin Components
-import AdminLogin from './admin/pages/AdminLogin.jsx';
-import AdminGuard from './admin/components/AdminGuard.jsx';
-import AdminLayout from './admin/components/AdminLayout.jsx';
-import AdminDashboard from './admin/pages/AdminDashboard.jsx';
-import ProductManager from './admin/pages/ProductManager.jsx';
-import LeadManager from './admin/pages/LeadManager.jsx';
-import CareerManager from './admin/pages/CareerManager.jsx';
-import GalleryManager from './admin/pages/GalleryManager.jsx';
-import CMSBuilder from './admin/pages/CMSBuilder.jsx';
-import BlogManager from './admin/pages/BlogManager.jsx';
-import MediaLibrary from './admin/pages/MediaLibrary.jsx';
-import HomepageBuilder from './admin/pages/HomepageBuilder.jsx';
-import SettingsPanel from './admin/pages/SettingsPanel.jsx';
-import UserManager from './admin/pages/UserManager.jsx';
-import ActivityLogPage from './admin/pages/ActivityLog.jsx';
+const AdminLogin = lazy(() => import('./admin/pages/AdminLogin.jsx'));
+const AdminGuard = lazy(() => import('./admin/components/AdminGuard.jsx'));
+const AdminLayout = lazy(() => import('./admin/components/AdminLayout.jsx'));
+const AdminDashboard = lazy(() => import('./admin/pages/AdminDashboard.jsx'));
+const ProductManager = lazy(() => import('./admin/pages/ProductManager.jsx'));
+const LeadManager = lazy(() => import('./admin/pages/LeadManager.jsx'));
+const CareerManager = lazy(() => import('./admin/pages/CareerManager.jsx'));
+const GalleryManager = lazy(() => import('./admin/pages/GalleryManager.jsx'));
+const CMSBuilder = lazy(() => import('./admin/pages/CMSBuilder.jsx'));
+const BlogManager = lazy(() => import('./admin/pages/BlogManager.jsx'));
+const MediaLibrary = lazy(() => import('./admin/pages/MediaLibrary.jsx'));
+const HomepageBuilder = lazy(() => import('./admin/pages/HomepageBuilder.jsx'));
+const SettingsPanel = lazy(() => import('./admin/pages/SettingsPanel.jsx'));
+const UserManager = lazy(() => import('./admin/pages/UserManager.jsx'));
+const ActivityLogPage = lazy(() => import('./admin/pages/ActivityLog.jsx'));
 
 import { useConfig } from './context/ConfigContext.jsx';
 
@@ -194,63 +194,65 @@ export default function App() {
         <ThemeProvider>
           <LanguageProvider>
             <AuthProvider>
-              <Routes>
-                {/* Public Pages */}
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/about-us" element={<AboutUs />} />
-                <Route path="/our-story" element={<OurStory />} />
-                <Route path="/process" element={<Process />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/custom-manufacturing" element={<CustomManufacturing />} />
-                <Route path="/private-label" element={<PrivateLabel />} />
-                <Route path="/quality-control" element={<QualityControl />} />
-                <Route path="/certifications" element={<Certifications />} />
-                <Route path="/gallery" element={<FactoryGallery />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<BlogDetail />} />
-                
-                <Route path="/products" element={<ProductsPage />} />
-                <Route path="/products/:slug" element={<ProductDetail />} />
-                <Route path="/faqs" element={<FAQs />} />
-                <Route path="/testimonials" element={<TestimonialsPage />} />
-                <Route path="/careers" element={<Careers />} />
-                <Route path="/contact" element={<ContactUs />} />
-                <Route path="/quote" element={<RequestQuote />} />
-                
-                <Route path="/sustainability" element={<Sustainability />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms-conditions" element={<TermsConditions />} />
+              <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center text-sm font-mono uppercase tracking-[0.25em] text-[#4A6080]">Loading platform...</div>}>
+                <Routes>
+                  {/* Public Pages */}
+                  <Route path="/" element={<LandingPage />} />
+                  <Route path="/about-us" element={<AboutUs />} />
+                  <Route path="/our-story" element={<OurStory />} />
+                  <Route path="/process" element={<Process />} />
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/custom-manufacturing" element={<CustomManufacturing />} />
+                  <Route path="/private-label" element={<PrivateLabel />} />
+                  <Route path="/quality-control" element={<QualityControl />} />
+                  <Route path="/certifications" element={<Certifications />} />
+                  <Route path="/gallery" element={<FactoryGallery />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog/:slug" element={<BlogDetail />} />
+                  
+                  <Route path="/products" element={<ProductsPage />} />
+                  <Route path="/products/:slug" element={<ProductDetail />} />
+                  <Route path="/faqs" element={<FAQs />} />
+                  <Route path="/testimonials" element={<TestimonialsPage />} />
+                  <Route path="/careers" element={<Careers />} />
+                  <Route path="/contact" element={<ContactUs />} />
+                  <Route path="/quote" element={<RequestQuote />} />
+                  
+                  <Route path="/sustainability" element={<Sustainability />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/terms-conditions" element={<TermsConditions />} />
 
-                {/* Admin Auth */}
-                <Route path="/admin/login" element={<AdminLogin defaultTab="login" />} />
-                <Route path="/login" element={<AdminLogin defaultTab="login" />} />
-                <Route path="/signup" element={<AdminLogin defaultTab="register" />} />
+                  {/* Admin Auth */}
+                  <Route path="/admin/login" element={<AdminLogin defaultTab="login" />} />
+                  <Route path="/login" element={<AdminLogin defaultTab="login" />} />
+                  <Route path="/signup" element={<AdminLogin defaultTab="register" />} />
 
-                {/* Admin Protected Routes */}
-                <Route path="/admin" element={<AdminPage minRole="Admin"><AdminDashboard /></AdminPage>} />
-                <Route path="/admin/products" element={<AdminPage minRole="Admin"><ProductManager /></AdminPage>} />
-                <Route path="/admin/quotes" element={<AdminPage minRole="Admin"><LeadManager /></AdminPage>} />
-                <Route path="/admin/careers" element={<AdminPage minRole="Admin"><CareerManager /></AdminPage>} />
-                <Route path="/admin/gallery" element={<AdminPage minRole="Admin"><GalleryManager /></AdminPage>} />
-                <Route path="/admin/cms" element={<AdminPage minRole="Admin"><CMSBuilder /></AdminPage>} />
-                <Route path="/admin/blogs" element={<AdminPage minRole="Admin"><BlogManager /></AdminPage>} />
-                <Route path="/admin/media" element={<AdminPage minRole="Admin"><MediaLibrary /></AdminPage>} />
-                <Route path="/admin/builder" element={<AdminPage minRole="Admin"><HomepageBuilder /></AdminPage>} />
-                <Route path="/admin/settings" element={<AdminPage minRole="Admin"><SettingsPanel /></AdminPage>} />
-                <Route path="/admin/users" element={<AdminPage minRole="Super Admin"><UserManager /></AdminPage>} />
-                <Route path="/admin/activity" element={<AdminPage minRole="Admin"><ActivityLogPage /></AdminPage>} />
+                  {/* Admin Protected Routes */}
+                  <Route path="/admin" element={<AdminPage minRole="Admin"><AdminDashboard /></AdminPage>} />
+                  <Route path="/admin/products" element={<AdminPage minRole="Admin"><ProductManager /></AdminPage>} />
+                  <Route path="/admin/quotes" element={<AdminPage minRole="Admin"><LeadManager /></AdminPage>} />
+                  <Route path="/admin/careers" element={<AdminPage minRole="Admin"><CareerManager /></AdminPage>} />
+                  <Route path="/admin/gallery" element={<AdminPage minRole="Admin"><GalleryManager /></AdminPage>} />
+                  <Route path="/admin/cms" element={<AdminPage minRole="Admin"><CMSBuilder /></AdminPage>} />
+                  <Route path="/admin/blogs" element={<AdminPage minRole="Admin"><BlogManager /></AdminPage>} />
+                  <Route path="/admin/media" element={<AdminPage minRole="Admin"><MediaLibrary /></AdminPage>} />
+                  <Route path="/admin/builder" element={<AdminPage minRole="Admin"><HomepageBuilder /></AdminPage>} />
+                  <Route path="/admin/settings" element={<AdminPage minRole="Admin"><SettingsPanel /></AdminPage>} />
+                  <Route path="/admin/users" element={<AdminPage minRole="Super Admin"><UserManager /></AdminPage>} />
+                  <Route path="/admin/activity" element={<AdminPage minRole="Admin"><ActivityLogPage /></AdminPage>} />
 
-                {/* 404 Catch-all */}
-                <Route path="*" element={
-                  <div className="min-h-screen bg-[#F8FAFF] flex items-center justify-center flex-col gap-4">
-                    <span className="font-display font-bold text-8xl text-[#1E3A8A]">404</span>
-                    <p className="font-sans text-[#4A6080] text-sm">Page not found.</p>
-                    <Link to="/" className="mt-4 px-6 py-2.5 bg-[#1E3A8A] text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-[#162A5E] transition-colors">
-                      Return Home
-                    </Link>
-                  </div>
-                } />
-              </Routes>
+                  {/* 404 Catch-all */}
+                  <Route path="*" element={
+                    <div className="min-h-screen bg-[#F8FAFF] flex items-center justify-center flex-col gap-4">
+                      <span className="font-display font-bold text-8xl text-[#1E3A8A]">404</span>
+                      <p className="font-sans text-[#4A6080] text-sm">Page not found.</p>
+                      <Link to="/" className="mt-4 px-6 py-2.5 bg-[#1E3A8A] text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-[#162A5E] transition-colors">
+                        Return Home
+                      </Link>
+                    </div>
+                  } />
+                </Routes>
+              </Suspense>
             </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>

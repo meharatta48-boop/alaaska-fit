@@ -37,11 +37,13 @@ const ALLOWED_ORIGINS = [
   process.env.FRONTEND_URL || 'http://localhost:5173',
   'http://localhost:5173',
   'http://localhost:5174',
+  'https://alaaska-fit.vercel.app',
+  'https://www.alaaska-fit.vercel.app',
+  'https://alaaska-fit.onrender.com',
 ];
 const corsOptions = {
   origin: (origin, callback) => {
-    // Allow requests with no origin (curl, mobile apps) or whitelisted origins
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+    if (!origin || ALLOWED_ORIGINS.includes(origin) || origin?.endsWith('.vercel.app')) {
       callback(null, true);
     } else {
       callback(new Error(`CORS: Origin ${origin} not allowed`));
@@ -49,7 +51,7 @@ const corsOptions = {
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 };
 app.use(cors(corsOptions));
 
@@ -65,6 +67,11 @@ const apiLimiter = rateLimit({
   message: 'Too many requests from this IP, please try again after 15 minutes'
 });
 app.use('/api/', apiLimiter);
+
+// Health Check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', service: 'alaaska-fit-api' });
+});
 
 // --- API ROUTES ---
 

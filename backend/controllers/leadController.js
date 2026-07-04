@@ -2,10 +2,10 @@ import { ContactMessage, NewsletterSubscription, ActivityLog } from '../models/i
 import { z } from 'zod';
 
 const contactValidationSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  subject: z.string().optional(),
-  message: z.string().min(5)
+  name: z.string().trim().min(2),
+  email: z.string().trim().email(),
+  subject: z.string().trim().max(120).optional(),
+  message: z.string().trim().min(5)
 });
 
 const newsletterValidationSchema = z.object({

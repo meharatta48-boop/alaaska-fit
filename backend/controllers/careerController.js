@@ -2,12 +2,12 @@ import { CareerSubmission, ActivityLog } from '../models/index.js';
 import { z } from 'zod';
 
 const careerValidationSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  phone: z.string().optional(),
-  position: z.string().min(2),
-  resumeUrl: z.string().optional(),
-  coverLetter: z.string().optional()
+  name: z.string().trim().min(2),
+  email: z.string().trim().email(),
+  phone: z.string().trim().optional(),
+  position: z.string().trim().min(2),
+  resumeUrl: z.string().trim().optional(),
+  coverLetter: z.string().trim().optional()
 });
 
 export const getApplications = async (req, res, next) => {
