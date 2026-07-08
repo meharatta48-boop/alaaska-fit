@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext.jsx';
 import { Play, Maximize2, X } from 'lucide-react';
+import SmartImage from '../components/SmartImage.jsx';
 
 export default function FactoryGallery() {
   const { t, isRTL } = useLanguage();
@@ -87,12 +88,13 @@ export default function FactoryGallery() {
                   <source src={item.url} type="video/mp4" />
                 </video>
               ) : (
-                <img
+                <SmartImage
                   src={item.url}
                   alt={item.title}
                   loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover opacity-60 group-hover:scale-102 transition-transform duration-700"
+                  objectFit="cover"
+                  className="opacity-60 group-hover:scale-[1.02] transition-transform duration-700"
+                  wrapperStyle={{ position: 'absolute', inset: 0, width: '100%', height: '100%', aspectRatio: 'unset' }}
                 />
               )}
 

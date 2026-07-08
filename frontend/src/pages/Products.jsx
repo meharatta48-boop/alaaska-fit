@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import WhatsAppButton from '../components/WhatsAppButton.jsx';
 import CommandPalette from '../components/CommandPalette.jsx';
+import SmartImage from '../components/SmartImage.jsx';
 import { Search, SlidersHorizontal, ArrowUpRight, HelpCircle, Loader2 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext.jsx';
 import { apiFetch } from '../utils/api.js';
@@ -158,8 +159,17 @@ export default function Products() {
         {/* Catalog Grid */}
         <section className="max-w-7xl mx-auto px-6 md:px-12">
           {loading ? (
-            <div className="flex items-center justify-center py-24">
-              <Loader2 size={36} className="animate-spin text-gold-400" />
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {Array(8).fill(0).map((_, i) => (
+                <div key={i} className="rounded-2xl overflow-hidden flex flex-col">
+                  <div className="aspect-[3/4] skeleton-light" />
+                  <div className="p-4 space-y-2.5 bg-white border border-[#F3F4F6] border-t-0 rounded-b-2xl">
+                    <div className="h-2 skeleton-light w-1/3" />
+                    <div className="h-4 skeleton-light w-4/5" />
+                    <div className="h-2.5 skeleton-light w-1/2 mt-2" />
+                  </div>
+                </div>
+              ))}
             </div>
           ) : filteredProducts.length === 0 ? (
             <div className="text-center py-20 text-matte-text text-sm">
@@ -173,11 +183,14 @@ export default function Products() {
                   to={`/products/${p.slug}`}
                   className="glass-card rounded-2xl overflow-hidden cursor-pointer flex flex-col group border border-[#C7D9F5]/40 dark:border-[#262626]"
                 >
-                  <div className="relative aspect-[3/4] bg-matte-gray overflow-hidden">
-                    <img
+                  <div className="relative overflow-hidden" style={{ aspectRatio: '3/4' }}>
+                    <SmartImage
                       src={p.images?.[0] || 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=80'}
                       alt={p.title}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                      objectFit="cover"
+                      className="transition-transform duration-700 group-hover:scale-105"
+                      wrapperStyle={{ position: 'absolute', inset: 0, width: '100%', height: '100%', aspectRatio: 'unset' }}
                     />
                     {p.isFeatured && (
                       <span className="absolute top-3 left-3 bg-[#1E3A8A] dark:bg-gold-400 text-white dark:text-black font-mono text-[8px] uppercase tracking-wider font-bold px-2 py-0.5 rounded">

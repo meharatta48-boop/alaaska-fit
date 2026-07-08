@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-
+/* Fonts loaded via index.html preload + non-blocking link for FOIT prevention */
 @import "tailwindcss";
 
 /* stylelint-disable at-rule-no-unknown */
@@ -86,7 +85,7 @@
 }
 
 /* ─── Force Light Mode Universally ─── */
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 html, html.light-mode { background-color: var(--bg-page) !important; color: var(--text-primary) !important; }
 html.dark { background-color: var(--bg-page) !important; color: var(--text-primary) !important; }
 
@@ -96,6 +95,8 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  position: relative;
 }
 
 /* ─── Auto contrast based on background color ─── */
@@ -425,6 +426,51 @@ select.input-style { cursor: pointer; }
 /* ─── Fade up animation ─── */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 .fade-up { animation: fadeUp 0.6s ease forwards; }
+
+/* ─── SmartImage Shimmer Animation ─── */
+@keyframes shimmerSlide {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+/* ─── Skeleton Pulse (for legacy loaders) ─── */
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+.skeleton-light {
+  background: linear-gradient(90deg, #E8EEF8 0%, #F5F8FF 40%, #E8EEF8 80%);
+  background-size: 200% 100%;
+  animation: shimmerSlide 1.6s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+/* ─── Image fade-in utility ─── */
+.img-fade {
+  transition: opacity 0.45s ease;
+}
+.img-fade.loaded {
+  opacity: 1 !important;
+}
+
+/* ─── Prevent any element from causing horizontal overflow ─── */
+.overflow-safe {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* ─── Hero mobile overflow guard ─── */
+#hero {
+  overflow-x: hidden;
+}
+#hero > * {
+  max-width: 100%;
+}
+
+/* ─── Responsive container guard ─── */
+.max-w-7xl {
+  width: 100%;
+}
 
 /* ─── Utilities ─── */
 .no-scrollbar::-webkit-scrollbar { display: none; }

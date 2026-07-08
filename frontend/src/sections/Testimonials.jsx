@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Star, Quote } from 'lucide-react';
+import SmartImage from '../components/SmartImage.jsx';
 
 const testimonials = [
   {
@@ -83,14 +84,16 @@ function TestimonialCard({ t, index }) {
 
       {/* Author */}
       <div className="flex items-center gap-3 pt-4 border-t border-[#E2E8F5]">
-        <img loading="lazy" decoding="async"
+        <SmartImage
           src={t.avatar}
           alt={t.name}
-          className="w-10 h-10 rounded-full object-cover border border-[#E2E8F5]"
+          loading="lazy"
+          objectFit="cover"
+          wrapperStyle={{ width: 40, height: 40, borderRadius: '50%', flexShrink: 0, border: '1px solid #E2E8F5' }}
         />
         <div>
           <div className="font-display font-bold text-sm text-[#0F1E45]">{t.name}</div>
-          <div className="text-[10px] font-mono text-gold-400 tracking-wider">{t.brand}</div>
+          <div className="text-[10px] font-mono text-[#D4AF37] tracking-wider">{t.brand}</div>
         </div>
       </div>
     </motion.div>

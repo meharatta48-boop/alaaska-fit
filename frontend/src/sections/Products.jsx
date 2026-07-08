@@ -3,6 +3,7 @@ import { useLanguage } from '../context/LanguageContext.jsx';
 import { apiFetch } from '../utils/api.js';
 import { Search, SlidersHorizontal, Download, ArrowUpRight, X, Layers, Percent, Truck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import SmartImage from '../components/SmartImage.jsx';
 
 export default function Products() {
   const { t, isRTL } = useLanguage();
@@ -167,14 +168,16 @@ export default function Products() {
         className="glass-card rounded-xl overflow-hidden cursor-pointer flex flex-col group"
       >
         {/* Visual Container */}
-        <div className="relative aspect-[3/4] bg-matte-gray overflow-hidden">
-          {/* Main Image */}
-          <img
+        <div className="relative bg-[#F0F4FC] overflow-hidden" style={{ aspectRatio: '3/4' }}>
+          {/* SmartImage with shimmer + fade-in */}
+          <SmartImage
             src={product.images[0] || 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=80'}
             alt={product.title}
+            aspectRatio="3/4"
             loading="lazy"
-            decoding="async"
-            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${hovered && product.videoUrl ? 'opacity-0' : 'opacity-100'}`}
+            objectFit="cover"
+            className={`transition-transform duration-700 group-hover:scale-105 ${hovered && product.videoUrl ? 'opacity-0' : 'opacity-100'}`}
+            wrapperStyle={{ position: 'absolute', inset: 0, aspectRatio: 'unset', width: '100%', height: '100%' }}
           />
 
           {/* Hover Video */}
@@ -270,9 +273,15 @@ export default function Products() {
         {loading ? (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {Array(4).fill(0).map((_, i) => (
-              <div key={i} className="glass-panel border border-white/5 rounded-xl aspect-[3/4] animate-pulse flex flex-col justify-end p-5">
-                <div className="h-4 bg-white/10 rounded w-1/2 mb-3"></div>
-                <div className="h-3 bg-white/5 rounded w-3/4"></div>
+              <div key={i} className="rounded-xl overflow-hidden flex flex-col">
+                {/* Image skeleton */}
+                <div className="aspect-[3/4] skeleton-light" />
+                {/* Text skeleton */}
+                <div className="p-5 space-y-2.5 bg-white border border-[#F3F4F6] border-t-0 rounded-b-xl">
+                  <div className="h-2.5 skeleton-light w-1/3" />
+                  <div className="h-4 skeleton-light w-3/4" />
+                  <div className="h-3 skeleton-light w-1/2 mt-3" />
+                </div>
               </div>
             ))}
           </div>
@@ -301,11 +310,13 @@ export default function Products() {
                 className="w-full max-w-4xl bg-white border border-[#E2E8F5] rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh] md:max-h-[80vh]"
               >
                 {/* Visual Panel */}
-                <div className="w-full md:w-1/2 bg-[#F8FAFF] relative flex items-center justify-center border-b md:border-b-0 md:border-r border-[#E2E8F5] aspect-square md:aspect-auto">
-                  <img
+                <div className="w-full md:w-1/2 bg-[#F8FAFF] relative flex items-center justify-center border-b md:border-b-0 md:border-r border-[#E2E8F5]" style={{ aspectRatio: '1/1', minHeight: '220px' }}>
+                  <SmartImage
                     src={activeProduct.images[0] || 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=80'}
                     alt={activeProduct.title}
-                    className="w-full h-full object-cover"
+                    loading="eager"
+                    objectFit="cover"
+                    wrapperStyle={{ position: 'absolute', inset: 0, width: '100%', height: '100%', aspectRatio: 'unset' }}
                   />
                   
                   {activeProduct.videoUrl && (

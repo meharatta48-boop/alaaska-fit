@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import WhatsAppButton from '../components/WhatsAppButton.jsx';
 import CommandPalette from '../components/CommandPalette.jsx';
+import SmartImage from '../components/SmartImage.jsx';
 import { ArrowLeft, Check, Download, Layers, ShieldCheck, HelpCircle, Loader2 } from 'lucide-react';
 import { apiFetch } from '../utils/api.js';
 
@@ -74,8 +75,26 @@ export default function ProductDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-[#0A0A0A] flex items-center justify-center">
-        <Loader2 size={36} className="animate-spin text-gold-400" />
+      <div className="min-h-screen bg-white flex flex-col font-sans">
+        <Navbar />
+        <main className="flex-grow pt-32 pb-24 max-w-7xl mx-auto px-6 md:px-12 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="aspect-[3/4] skeleton-light rounded-3xl" />
+              <div className="flex gap-3">
+                {[0,1,2].map(i => <div key={i} className="w-20 aspect-square skeleton-light rounded-xl" />)}
+              </div>
+            </div>
+            <div className="lg:col-span-5 space-y-6">
+              <div className="h-5 skeleton-light w-1/4" />
+              <div className="h-10 skeleton-light w-3/4" />
+              <div className="h-4 skeleton-light w-full" />
+              <div className="h-4 skeleton-light w-5/6" />
+              <div className="h-40 skeleton-light rounded-2xl" />
+            </div>
+          </div>
+        </main>
+        <Footer />
       </div>
     );
   }
@@ -117,11 +136,14 @@ export default function ProductDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Left: Images & Carousel */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="relative aspect-[3/4] bg-[#F3F4F6] dark:bg-matte-gray rounded-3xl overflow-hidden border border-[#C7D9F5]/40 dark:border-[#262626]">
-              <img
+            <div className="relative overflow-hidden rounded-3xl border border-[#C7D9F5]/40 dark:border-[#262626]" style={{ aspectRatio: '3/4' }}>
+              <SmartImage
                 src={product.images?.[activeImage] || 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=80'}
                 alt={product.title}
-                className="w-full h-full object-cover"
+                loading="eager"
+                fetchpriority="high"
+                objectFit="cover"
+                wrapperStyle={{ position: 'absolute', inset: 0, width: '100%', height: '100%', aspectRatio: 'unset' }}
               />
             </div>
 
@@ -131,11 +153,18 @@ export default function ProductDetail() {
                   <button
                     key={i}
                     onClick={() => setActiveImage(i)}
-                    className={`relative w-20 aspect-square rounded-xl overflow-hidden border transition-all cursor-pointer ${
+                    className={`relative w-20 overflow-hidden rounded-xl border transition-all cursor-pointer ${
                       activeImage === i ? 'border-[#1E3A8A] dark:border-gold-400 ring-1 ring-gold-400/20' : 'border-[#C7D9F5]/40 dark:border-[#262626] opacity-70'
                     }`}
+                    style={{ aspectRatio: '1/1' }}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <SmartImage
+                      src={img}
+                      alt={`Product view ${i + 1}`}
+                      loading="lazy"
+                      objectFit="cover"
+                      wrapperStyle={{ position: 'absolute', inset: 0, width: '100%', height: '100%', aspectRatio: 'unset' }}
+                    />
                   </button>
                 ))}
               </div>

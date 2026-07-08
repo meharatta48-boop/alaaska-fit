@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import WhatsAppButton from '../components/WhatsAppButton.jsx';
 import CommandPalette from '../components/CommandPalette.jsx';
+import SmartImage from '../components/SmartImage.jsx';
 import { Search, Calendar, User, ArrowRight, Loader2 } from 'lucide-react';
 import { apiFetch } from '../utils/api.js';
 
@@ -97,8 +98,18 @@ export default function Blog() {
         {/* Blog Post Cards */}
         <section className="max-w-7xl mx-auto px-6 md:px-12">
           {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <Loader2 size={36} className="animate-spin text-gold-400" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {Array(4).fill(0).map((_, i) => (
+                <div key={i} className="rounded-3xl overflow-hidden flex flex-col">
+                  <div className="aspect-[16/9] skeleton-light" />
+                  <div className="p-6 space-y-3 bg-white border border-[#F3F4F6] border-t-0 rounded-b-3xl">
+                    <div className="h-2 skeleton-light w-1/4" />
+                    <div className="h-5 skeleton-light w-4/5" />
+                    <div className="h-3 skeleton-light w-full" />
+                    <div className="h-3 skeleton-light w-3/4" />
+                  </div>
+                </div>
+              ))}
             </div>
           ) : filteredBlogs.length === 0 ? (
             <div className="text-center py-20 font-light text-matte-text text-sm">
@@ -116,8 +127,15 @@ export default function Blog() {
                 >
                   <div>
                     {post.featuredImage && (
-                      <div className="aspect-[16/9] w-full overflow-hidden border-b border-[#C7D9F5]/20 dark:border-[#262626]">
-                        <img src={post.featuredImage} alt={post.title} className="w-full h-full object-cover hover:scale-102 transition-transform duration-500" />
+                      <div className="aspect-[16/9] w-full overflow-hidden border-b border-[#C7D9F5]/20 dark:border-[#262626] relative">
+                        <SmartImage
+                          src={post.featuredImage}
+                          alt={post.title}
+                          loading={idx < 2 ? 'eager' : 'lazy'}
+                          objectFit="cover"
+                          className="hover:scale-[1.02] transition-transform duration-500"
+                          wrapperStyle={{ position: 'absolute', inset: 0, width: '100%', height: '100%', aspectRatio: 'unset' }}
+                        />
                       </div>
                     )}
                     <div className="p-6 md:p-8 space-y-4">

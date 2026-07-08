@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext.jsx';
 import { apiFetch } from '../utils/api.js';
 import { ArrowUpRight, CalendarDays, Tag } from 'lucide-react';
+import SmartImage from '../components/SmartImage.jsx';
 
 export default function Blog() {
   const { t, isRTL } = useLanguage();
@@ -86,7 +87,14 @@ export default function Blog() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {Array(3).fill(0).map((_, i) => (
-              <div key={i} className="bg-matte-black border border-matte-border rounded-xl h-80 animate-pulse" />
+              <div key={i} className="rounded-xl overflow-hidden">
+                <div className="h-44 skeleton-light" />
+                <div className="p-5 space-y-3 bg-white border border-[#F3F4F6] border-t-0 rounded-b-xl">
+                  <div className="h-2.5 skeleton-light w-1/3" />
+                  <div className="h-4 skeleton-light w-5/6" />
+                  <div className="h-3 skeleton-light w-2/3" />
+                </div>
+              </div>
             ))}
           </div>
         ) : (
@@ -99,15 +107,18 @@ export default function Blog() {
               >
                 {/* Image */}
                 <div className={`relative overflow-hidden ${index === 0 ? 'h-56' : 'h-44'}`}>
-                  <img
+                  <SmartImage
                     src={blog.featuredImage}
                     alt={blog.title}
-                    className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700"
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    objectFit="cover"
+                    className="opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700"
+                    wrapperStyle={{ position: 'absolute', inset: 0, width: '100%', height: '100%', aspectRatio: 'unset' }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-matte-black/90 via-matte-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
                   {/* Category badge */}
-                  <div className="absolute top-4 left-4 bg-gold-400/90 text-black text-[9px] font-mono font-bold px-3 py-1 rounded uppercase tracking-wide">
+                  <div className="absolute top-4 left-4 bg-[#D4AF37]/90 text-black text-[9px] font-mono font-bold px-3 py-1 rounded uppercase tracking-wide">
                     {blog.category}
                   </div>
                 </div>

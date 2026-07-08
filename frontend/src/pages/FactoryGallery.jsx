@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import WhatsAppButton from '../components/WhatsAppButton.jsx';
 import CommandPalette from '../components/CommandPalette.jsx';
+import SmartImage from '../components/SmartImage.jsx';
 import { Eye, Loader2 } from 'lucide-react';
 import { apiFetch } from '../utils/api.js';
 
@@ -94,10 +95,13 @@ export default function FactoryGallery() {
                   key={item.name}
                   className="glass-card overflow-hidden rounded-2xl border border-[#C7D9F5]/40 dark:border-[#262626] relative aspect-[4/3] group cursor-pointer shadow-sm hover:shadow-md"
                 >
-                  <img
+                  <SmartImage
                     src={item.url}
                     alt={item.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading={idx < 4 ? 'eager' : 'lazy'}
+                    objectFit="cover"
+                    className="group-hover:scale-105 transition-transform duration-500"
+                    wrapperStyle={{ position: 'absolute', inset: 0, width: '100%', height: '100%', aspectRatio: 'unset' }}
                   />
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-5 text-white">
                     <span className="text-[9px] font-mono uppercase tracking-wider bg-gold-400/20 text-gold-400 px-2.5 py-1 rounded border border-gold-400/30 self-start">
