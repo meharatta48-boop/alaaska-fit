@@ -48,8 +48,11 @@ export default function Navbar() {
   const branding = settings.branding || {};
   const colorTheme = settings.colorTheme || {};
 
-  // Determine nav items — use dynamic if set, else static
-  const NAV_ITEMS = STATIC_NAV_ITEMS;
+  // Determine nav items — use dynamic admin config if set, else static fallback
+  const dynamicMenuItems = headerConfig.menuItems;
+  const NAV_ITEMS = (dynamicMenuItems && dynamicMenuItems.length > 0)
+    ? dynamicMenuItems
+    : STATIC_NAV_ITEMS;
 
   // Announcement bar
   const showAnnouncement = headerConfig.showAnnouncement !== false && !!headerConfig.announcementText;
@@ -139,12 +142,14 @@ export default function Navbar() {
 
       {/* Navbar */}
       <nav
-        className={`fixed inset-x-0 z-50 transition-all duration-300 ${
+        className={`${headerConfig.stickyNavbar !== false ? 'fixed' : 'relative'} inset-x-0 z-50 transition-all duration-300 ${
           announcementVisible ? 'top-8' : 'top-0'
         } ${
           scrolled
             ? 'bg-white/97 backdrop-blur-md border-b border-[#E2E8F5] shadow-[0_2px_20px_rgba(15,30,69,0.08)]'
-            : 'bg-white/90 backdrop-blur-sm border-b border-[#E2E8F5]/60'
+            : headerConfig.transparentNavbar && !scrolled
+              ? 'bg-transparent border-b border-transparent'
+              : 'bg-white/90 backdrop-blur-sm border-b border-[#E2E8F5]/60'
         }`}
         style={colorTheme.navbarBackground ? { backgroundColor: colorTheme.navbarBackground + (scrolled ? 'F7' : 'E6') } : {}}
       >

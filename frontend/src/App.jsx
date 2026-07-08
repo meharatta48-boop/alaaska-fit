@@ -26,6 +26,9 @@ import BlogSection from './sections/Blog.jsx';
 import FAQSection from './sections/FAQ.jsx';
 import ContactSection from './sections/Contact.jsx';
 
+// Maintenance Page
+import MaintenancePage from './pages/MaintenancePage.jsx';
+
 // Standalone Public Pages
 const AboutUs = lazy(() => import('./pages/AboutUs.jsx'));
 const OurStory = lazy(() => import('./pages/OurStory.jsx'));
@@ -67,6 +70,28 @@ const UserManager = lazy(() => import('./admin/pages/UserManager.jsx'));
 const ActivityLogPage = lazy(() => import('./admin/pages/ActivityLog.jsx'));
 
 import { useConfig } from './context/ConfigContext.jsx';
+import { useAuth } from './context/AuthContext.jsx';
+
+// ─── Maintenance Gate ─────────────────────────────────────────────────────────
+// Intercepts all public routes when maintenance mode is enabled
+function MaintenanceGate({ children }) {
+  const { config, loading } = useConfig();
+  const { user } = useAuth();
+
+  // Don't gate while loading config
+  if (loading) return children;
+
+  const maintenanceEnabled = config?.settings?.maintenanceMode?.enabled;
+  const allowAdmins = config?.settings?.maintenanceMode?.allowAdmins !== false;
+  const isAdmin = user && (user.role === 'Admin' || user.role === 'Super Admin');
+
+  // Bypass if admin and bypass is allowed
+  if (maintenanceEnabled && !(allowAdmins && isAdmin)) {
+    return <MaintenancePage />;
+  }
+
+  return children;
+}
 
 // ─── Dynamic Head Tags (title, description, favicon) ─────────────────────────
 function DynamicHead() {
@@ -200,31 +225,31 @@ export default function App() {
             <AuthProvider>
               <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center text-sm font-mono uppercase tracking-[0.25em] text-[#4A6080]">Loading platform...</div>}>
                 <Routes>
-                  {/* Public Pages */}
-                  <Route path="/" element={<LandingPage />} />
-                  <Route path="/about-us" element={<AboutUs />} />
-                  <Route path="/our-story" element={<OurStory />} />
-                  <Route path="/process" element={<Process />} />
-                  <Route path="/services" element={<Services />} />
-                  <Route path="/custom-manufacturing" element={<CustomManufacturing />} />
-                  <Route path="/private-label" element={<PrivateLabel />} />
-                  <Route path="/quality-control" element={<QualityControl />} />
-                  <Route path="/certifications" element={<Certifications />} />
-                  <Route path="/gallery" element={<FactoryGallery />} />
-                  <Route path="/blog" element={<Blog />} />
-                  <Route path="/blog/:slug" element={<BlogDetail />} />
-                  
-                  <Route path="/products" element={<ProductsPage />} />
-                  <Route path="/products/:slug" element={<ProductDetail />} />
-                  <Route path="/faqs" element={<FAQs />} />
-                  <Route path="/testimonials" element={<TestimonialsPage />} />
-                  <Route path="/careers" element={<Careers />} />
-                  <Route path="/contact" element={<ContactUs />} />
-                  <Route path="/quote" element={<RequestQuote />} />
-                  
-                  <Route path="/sustainability" element={<Sustainability />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="/terms-conditions" element={<TermsConditions />} />
+                  {/* Public Pages — all gated by MaintenanceGate */}
+                  <Route path="/" element={<MaintenanceGate><LandingPage /></MaintenanceGate>} />
+                  <Route path="/about-us" element={<MaintenanceGate><AboutUs /></MaintenanceGate>} />
+                  <Route path="/our-story" element={<MaintenanceGate><OurStory /></MaintenanceGate>} />
+                  <Route path="/process" element={<MaintenanceGate><Process /></MaintenanceGate>} />
+                  <Route path="/services" element={<MaintenanceGate><Services /></MaintenanceGate>} />
+                  <Route path="/custom-manufacturing" element={<MaintenanceGate><CustomManufacturing /></MaintenanceGate>} />
+                  <Route path="/private-label" element={<MaintenanceGate><PrivateLabel /></MaintenanceGate>} />
+                  <Route path="/quality-control" element={<MaintenanceGate><QualityControl /></MaintenanceGate>} />
+                  <Route path="/certifications" element={<MaintenanceGate><Certifications /></MaintenanceGate>} />
+                  <Route path="/gallery" element={<MaintenanceGate><FactoryGallery /></MaintenanceGate>} />
+                  <Route path="/blog" element={<MaintenanceGate><Blog /></MaintenanceGate>} />
+                  <Route path="/blog/:slug" element={<MaintenanceGate><BlogDetail /></MaintenanceGate>} />
+
+                  <Route path="/products" element={<MaintenanceGate><ProductsPage /></MaintenanceGate>} />
+                  <Route path="/products/:slug" element={<MaintenanceGate><ProductDetail /></MaintenanceGate>} />
+                  <Route path="/faqs" element={<MaintenanceGate><FAQs /></MaintenanceGate>} />
+                  <Route path="/testimonials" element={<MaintenanceGate><TestimonialsPage /></MaintenanceGate>} />
+                  <Route path="/careers" element={<MaintenanceGate><Careers /></MaintenanceGate>} />
+                  <Route path="/contact" element={<MaintenanceGate><ContactUs /></MaintenanceGate>} />
+                  <Route path="/quote" element={<MaintenanceGate><RequestQuote /></MaintenanceGate>} />
+
+                  <Route path="/sustainability" element={<MaintenanceGate><Sustainability /></MaintenanceGate>} />
+                  <Route path="/privacy-policy" element={<MaintenanceGate><PrivacyPolicy /></MaintenanceGate>} />
+                  <Route path="/terms-conditions" element={<MaintenanceGate><TermsConditions /></MaintenanceGate>} />
 
                   {/* Admin Auth */}
                   <Route path="/admin/login" element={<AdminLogin defaultTab="login" />} />

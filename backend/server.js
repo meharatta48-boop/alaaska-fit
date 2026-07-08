@@ -80,8 +80,12 @@ const apiLimiter = rateLimit({
 });
 app.use('/api/', apiLimiter);
 
-app.use((req, res, next) => {
-  res.set('Cache-Control', 'public, max-age=300, s-maxage=600');
+// No global cache — let individual routes decide
+// Config routes must never be cached so settings update instantly
+app.use('/api/config', (req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
   next();
 });
 
